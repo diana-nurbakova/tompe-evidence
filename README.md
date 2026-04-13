@@ -1,7 +1,7 @@
 # Retroactive Validation of the Theory of Mind Framework for Post-Editing Pedagogy
 
 **Companion repository** for the EC-TEL 2026 submission:  
-*"A Theory of Mind Framework for Scaffolded Machine Translation Post-Editing Training"*
+*"When Fluency Masks Failure: A Theory of Mind Framework for Machine Translation Post-Editing Training"*
 
 This repository contains the experiment code, data encodings, and full results for the retroactive validation study described in the paper. All materials are provided for reproducibility and transparency.
 
