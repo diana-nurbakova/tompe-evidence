@@ -42,7 +42,7 @@ tompe-evidence/
 │       ├── exp5_convergence.py        # Exp 5: Integrative convergence analysis
 │       ├── visualizations.py          # Publication-quality figure generators
 │       └── data/
-│           └── published_data.py      # All 14 sources encoded as structured dicts
+│           └── published_data.py      # All 13 sources encoded as structured dicts
 ├── outputs/
 │   └── ectel/
 │       ├── all_results.json           # Full-run structured results
@@ -74,9 +74,9 @@ tompe-evidence/
 
 **Prediction:** Error types requiring higher-order ToM are harder to detect (Kendall's τ > 0 between ToM rank and observed difficulty).
 
-**Method:** Rank correlation between the ToM ordinal scale and independently reported difficulty proxies (eye-tracking fixation duration, detection rates, correction rates, residual error rates) across 4 published sources.
+**Method:** Rank correlation between the ToM ordinal scale and independently reported difficulty proxies (eye-tracking fixation duration, correction rates, residual error rates) across 3 published sources.
 
-**Result:** Pooled τ = 0.386 (p = 0.044). Weighted τ (Fisher z) = 0.919. All 4/4 sources show the predicted positive direction. Daems et al. (2017) yields a perfect monotonic relationship (τ = 1.0, p = 0.017) across five error types measured via eye-tracking.
+**Result (no_temnikova run):** Pooled τ = 0.331 (p = 0.124). Weighted τ (Fisher z) = 0.915. All 3/3 sources show the predicted positive direction. Daems et al. (2017) yields a perfect monotonic relationship (τ = 1.0, p = 0.017) across five error types measured via eye-tracking. The full run (including Temnikova) shows pooled τ = 0.172 (p = 0.279), positive across all 4 sources.
 
 ### Experiment 2: Fluency Paradox as ToM-Selective Detection Impairment
 
@@ -135,9 +135,9 @@ Only 3 contradictions, all confined to a single source (Koponen 2019) and a sing
 
 ## Data Sources
 
-14 published studies were encoded, spanning:
+13 published studies were encoded, spanning:
 
-- **Language pairs:** EN-NL, EN-JA, EN-DE, EN-SR, EN-FR, EN-PT-BR, EN-FI, EN-EL, ES-EN, AR, RU, ES, BG
+- **Language pairs:** EN-NL, EN-JA, EN-DE, EN-SR, EN-FR, EN-PT-BR, EN-FI, EN-EL, AR, RU, ES, BG
 - **MT paradigms:** SMT (phrase-based), NMT, RBMT, Translation Memory
 - **Participant populations:** Professional translators, translation students, novice post-editors
 - **Measurement modalities:** Eye-tracking, keystroke logging (HTER), error annotation, correction rates
@@ -164,7 +164,7 @@ The `no_temnikova/` output directory contains a sensitivity run excluding Temnik
 ### Running
 
 ```bash
-# Full run (all 14 sources)
+# Full run (all 13 sources)
 python -m experiments.ectel.run_all
 
 # Sensitivity run (Temnikova excluded)
@@ -199,7 +199,7 @@ The orchestrator produces:
 
 | Experiment | Prediction | Result | Verdict |
 |-----------|-----------|--------|---------|
-| Exp 1: Difficulty Ordering | τ > 0 | τ = 0.386, p = 0.044 | **Confirmed** |
+| Exp 1: Difficulty Ordering | τ > 0 | τ = 0.331, p = 0.124 (3/3 positive) | **Trend** |
 | Exp 2: Fluency Paradox | Low-ToM impr. > High-ToM | 4/4 confirmed | **Confirmed** |
 | Exp 3: Experience × ToM | Gap widens with ToM | τ = 1.0, p = 0.017 | **Confirmed** |
 | Exp 3b: Developmental | Low-ToM mastered first | 3/3 methods, mean τ = 0.941 | **Confirmed** |
