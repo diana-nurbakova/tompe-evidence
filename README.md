@@ -48,6 +48,7 @@ tompe-evidence/
 │       ├── all_results.json           # Full-run structured results
 │       ├── ECTEL_Experiment_Report.md  # Full-run report
 │       ├── F4_difficulty_scatter.png   # ToM rank vs. observed difficulty
+│       ├── F4b_difficulty_combined.png # Combined scatter (min-max normalised)
 │       ├── F5_fluency_asymmetry.png   # NMT improvement by ToM group
 │       ├── F6_convergence_heatmap.png  # 7 skills × 4 experiments convergence
 │       ├── F_exp3b_developmental.png   # Learning curves by error type
@@ -57,6 +58,7 @@ tompe-evidence/
 │           ├── all_results.json
 │           ├── ECTEL_Detailed_Report.md  # Detailed report for this run
 │           ├── F4_difficulty_scatter.png
+│           ├── F4b_difficulty_combined.png
 │           ├── F5_fluency_asymmetry.png
 │           ├── F6_convergence_heatmap.png
 │           ├── F_exp3b_developmental.png
@@ -187,6 +189,7 @@ The orchestrator produces:
 | Figure | Description |
 |--------|-------------|
 | `F4_difficulty_scatter.png` | ToM rank vs. observed difficulty (scatter, one panel per source) |
+| `F4b_difficulty_combined.png` | Combined scatter: all sources on one axis, min-max normalised difficulty |
 | `F5_fluency_asymmetry.png` | NMT improvement by ToM group (clustered bar chart, 4 sources) |
 | `F6_convergence_heatmap.png` | Convergence matrix: 7 skills × 4 experiments (annotated heatmap) |
 | `F_exp3b_developmental.png` | Learning curves by error type + phase improvement bars |

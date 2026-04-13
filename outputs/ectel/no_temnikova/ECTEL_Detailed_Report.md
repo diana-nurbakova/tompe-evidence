@@ -2,8 +2,8 @@
 
 ## Detailed Experiment Report (Sensitivity Run: Temnikova Excluded)
 
-**Generated:** 2026-04-13 11:22
-**Run timestamp:** 2026-04-13T11:22:18.976250
+**Generated:** 2026-04-13 11:41
+**Run timestamp:** 2026-04-13T11:37:43.548036
 **Spec version:** ECTEL2026_v1
 **Tag:** `no_temnikova`
 **Excluded sources:** Temnikova2010
@@ -61,7 +61,7 @@ perspective-taking:
 
 ### 3.1 Source Inventory
 
-13 published studies were used in this sensitivity run (Temnikova 2010 excluded).
+12 published studies were used in this sensitivity run (Temnikova 2010 excluded).
 Each was encoded as a structured Python dictionary with error types mapped to ToM skills.
 
 | ID | Reference | Participants | Language Pair(s) | MT System(s) | Experiments |
@@ -82,7 +82,7 @@ Each was encoded as a structured Python dictionary with error types mapped to To
 
 - **Sources per experiment:** Exp 1: 3, Exp 2: 4, Exp 3: 3, Exp 4: 5
 - **Total unique sources:** 12 (some used across multiple experiments)
-- **Language pairs covered:** EN–NL, EN–JA, EN–DE, EN–SR, EN–FR, EN–PT-BR, EN–FI, EN–EL, ES–EN, AR, RU, ES, BG
+- **Language pairs covered:** EN–NL, EN–JA, EN–DE, EN–SR, EN–FR, EN–PT-BR, EN–FI, EN–EL, AR, RU, ES, BG
 - **MT paradigms covered:** SMT (phrase-based), NMT (Google, generic), RBMT, TM (translation memory)
 - **Participant populations:** Professional translators, translation students, novice post-editors
 - **Measurement modalities:** Eye-tracking (fixation duration), keystroke logging (HTER), error annotation, correction rates, edit classification
@@ -164,9 +164,6 @@ Pooled aggregate uses Fisher z-transform for meta-analytic weighting by sample s
 Eye-tracking fixation duration increases perfectly from S1 (surface) through S7
 (coherence). This is the strongest single result: five distinct error types, each
 at a different ToM level, all in predicted order.
-
-**Trainee Detection Rates:** Perfect ordering (S1: 93% → S3: 80% → S4: 67%)
-but only 3 types, so p = 0.333 (sample too small for significance).
 
 **Yamada (2019):** Strong correlation (τ = 0.913, p = 0.071). NMT correction rates
 decrease from grammar (S2: 78%) through mistranslation (S3: 65%) to omission (S4: 58%).
@@ -509,6 +506,7 @@ alongside this report.
 | Figure | File | Description |
 |--------|------|-------------|
 | F4 | `F4_difficulty_scatter.png` | ToM rank vs observed difficulty (scatter plot, one panel per source) |
+| F4b | `F4b_difficulty_combined.png` | Combined scatter: all sources on one axis, min-max normalised difficulty |
 | F5 | `F5_fluency_asymmetry.png` | NMT improvement by ToM group (clustered bar chart, 4 sources) |
 | F6 | `F6_convergence_heatmap.png` | Convergence matrix: 7 skills × 4 experiments (heatmap with annotations) |
 | Supp | `F_exp4_overediting.png` | Over-editing concentration by ToM level (stacked bars, 3 sources) |
@@ -537,7 +535,7 @@ python -m experiments.ectel.run_all --exclude Temnikova2010 Popovic2018 --tag cu
 experiments/ectel/
   run_all.py                         # Orchestrator with --exclude and --tag flags
   tom_mapping.py                     # MQM-to-ToM mapping; TomRank enum; skill categories
-  exp1_difficulty_ordering.py         # 4 extractors (Daems/Trainee/Yamada/Popovic)
+  exp1_difficulty_ordering.py         # 3 extractors (Daems/Yamada/Popovic)
   exp2_fluency_paradox.py             # 4 analysers (Yamada/Bentivogli/VanBrussel/Koponen)
   exp3_experience_interaction.py      # 3 analysers (Daems/DeAlmeida/Stasimioti)
   exp4_overediting.py                 # 5 analysers (KoponenSalmi/Koponen/NitzkeGros/DeAlmeida/Mellinger)
@@ -561,6 +559,7 @@ outputs/ectel/no_temnikova/
   all_results.json              # Complete structured results (this run)
   ECTEL_Detailed_Report.md      # This report
   F4_difficulty_scatter.png
+  F4b_difficulty_combined.png
   F5_fluency_asymmetry.png
   F6_convergence_heatmap.png
   F_exp4_overediting.png
