@@ -452,7 +452,7 @@ python -m experiments.tom_validation.run_all --skip-iou-variants
 python -m experiments.tom_validation.run_all --skip-r
 ```
 
-The R analyses require R ≥ 4.2 with packages `ordinal` and `lme4` installed. If R is missing, [r_runner.py](../../experiments/tom_validation/r_runner.py) returns `skipped` records and the Python fixed-effects fits remain authoritative.
+The R analyses require R ≥ 4.2 with packages `ordinal`, `lme4` and `jsonlite`; install them with `Rscript experiments/tom_validation/install.R` ([install.R](../../experiments/tom_validation/install.R)). If R is missing, [r_runner.py](../../experiments/tom_validation/r_runner.py) returns `skipped` records and the Python fixed-effects fits remain authoritative.
 
 ---
 

@@ -47,10 +47,8 @@ Tests predictions of the seven-**skill** model (S1–S7) against findings report
 published post-editing studies. The skills and the L0–L3 levels above are different
 constructs used for different purposes, so their mappings are not expected to align.
 
-In October 2026 every encoded value was re-extracted from the full texts. Values that
-the sources do not report were withdrawn, and each withdrawal is recorded with its
-reason in `published_data.DELETED`. Current status
-(see [Experiment_Report.md](outputs/retroactive_validation/Experiment_Report.md)):
+Current status of the epxeriments can be found in 
+ [Experiment_Report.md](outputs/retroactive_validation/Experiment_Report.md):
 
 | Analysis | Status |
 |---|---|
@@ -69,8 +67,10 @@ be cited. They remain in the history for audit.
 ## Reproducing the results
 
 Requires Python 3.11. The R stages of the ToM hierarchy validation additionally need R
-with `ordinal`, `lme4` and `jsonlite`; the committed results used R 4.2.3,
-ordinal 2023.12.4 and lme4 1.1.35.3.
+with `ordinal`, `lme4` and `jsonlite`; install them with
+`Rscript experiments/tom_validation/install.R`. The committed results used R 4.2.3,
+ordinal 2023.12.4 and lme4 1.1.35.3; re-running with R 4.6.1, ordinal 2026.7.26 and
+lme4 2.0.6 changes the CLMM and GLMM estimates only in the fourth decimal place.
 
 ```bash
 pip install -r requirements.txt
