@@ -2,3 +2,10 @@ __pycache__/
 *.pyc
 .venv/
 .env
+specs/
+
+# WMT data (fetched by scripts/fetch_wmt_mqm.py) and derived files
+data/
+*.part
+outputs/tom_validation/tom_errors.csv
+outputs/tom_validation/rater_level_data.csv

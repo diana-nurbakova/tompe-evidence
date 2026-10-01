@@ -1,0 +1,7 @@
+# Python 3.11. Versions verified to reproduce the committed outputs.
+numpy==1.26.4
+scipy==1.17.1
+pandas==2.3.3
+statsmodels==0.14.5
+matplotlib==3.10.8
+seaborn==0.13.2
