@@ -1,416 +1,273 @@
-# EC-TEL 2026: Retroactive Validation of the ToM Framework
+# Retroactive Validation of the ToM Framework for Post-Editing
 
-## Experiment Report
+Detailed results report. Generated from `all_results.json` and `data/published_data.py`; do not edit by hand.
 
-**Date:** 2026-03-19
-**Spec version:** ECTEL2026_ToM_Experimental_Spec_v1
-**Run variants:** `full` (all sources) and `no_temnikova` (Temnikova 2010 excluded)
-
----
-
-## 1. Overview
-
-This report documents five experiments that validate the Theory of Mind (ToM) framework for post-editing (PE) pedagogy against independently published empirical data. No new student data was collected. Each experiment tests a specific prediction derived from the framework against findings from different research groups, language pairs, and years.
-
-The core logic is that convergence across independent studies constitutes evidence for the framework's explanatory power. The framework proposes a 7-skill hierarchy (S1-S7) mapped to ascending ToM levels, predicting that higher-order skills require more complex cognitive perspective-taking and are therefore harder to detect, more affected by MT fluency, more differentiated by expertise, and less prone to over-editing.
+- **Generated:** 2026-10-01 17:50
+- **Run timestamp:** 2026-10-01T17:49:39.315787
+- **Data version:** published_data.py verified 2026-10
+- **Tag:** `full`
+- **Excluded sources:** none
+- **Publication:** Diana Nurbakova and Liana Ermakova. 2026. *When Fluency Masks Failure: A Theory of Mind Model of Error Detection in Machine Translation Post-Editing.* In Proceedings of the IEEE/WIC International Conference on Web Intelligence and Intelligent Agent Technology (WI-IAT 2026).
 
 ---
 
-## 2. ToM Skill Hierarchy and MQM Mapping
+## 1. Summary
 
-All experiments rely on mapping published error categories to the 7-skill / ToM-level model:
+| Analysis | Status | Support | Mixed | Against | Uninformative | Sources |
+|---|---|---|---|---|---|---|
+| Analysis 1 | qualitative only | 2 | 0 | 0 | 0 | Daems2017, Popovic2018 |
+| Analysis 2 | run | 5 | 1 | 1 | 0 | Bentivogli2018, Koponen2019, Popovic2018, VanBrussel2018, Yamada2019 |
+| Analysis 4 | run | 2 | 1 | 0 | 1 | DeAlmeida2013, Koponen2015, Koponen2019, KoponenSalmi2017 |
+| Analysis 3 | withdrawn |  |  |  |  | Expertise: no inferential source survives verification. |
+| Analysis 3b | withdrawn |  |  |  |  | Development: Koponen (2015) contains no per-type or per-session data. |
 
-| ToM Level | Rank | Skills | MQM Categories | Cognitive Demand |
-|---|---|---|---|---|
-| 1st_machine (form) | 1 | S1 Surface | Spelling, Punctuation | Recognise surface deviance |
-| 1st_machine (form) | 2 | S2 Grammar | Grammar, Word form | Recognise structural deviance |
-| 1st_machine (meaning) | 3 | S3 Meaning | Mistranslation, Wrong sense, False cognate | Compare ST-TT meaning |
-| 1st_author | 4 | S4 Completeness | Omission, Addition, Untranslated | Recover author intent |
-| 2nd_reader | 4 | S5 Terminology | Terminology | Model domain reader |
-| 2nd_reader | 4 | S6 Pragmatic | Register, Style, Locale | Model reader inference |
-| recursive | 5 | S7 Discourse | Coherence, Cohesion | Multi-agent reasoning |
-
-**Ordinal scale for rank correlations:** S1=1, S2=2, S3=3, S4=S5=S6=4, S7=5.
-**Grouping for binary comparisons:** Low-ToM = S1-S2, High-ToM = S3+.
-
----
-
-## 3. Data Sources
-
-### 3.1 Source Inventory
-
-14 published studies were encoded as structured data. Each source was mapped to the ToM skill hierarchy using the rules in Section 2.
-
-| ID | Reference | N | Lang. Pair | MT System | Used In |
-|---|---|---|---|---|---|
-| Temnikova2010 | Temnikova (2010), validated Temnikova et al. (2016) | Literature-derived | AR, RU, ES, BG | Generic | Exp 1 |
-| Daems2017 | Daems et al. (2017), *Frontiers in Psychology* | 23 (13 prof + 10 stud) | EN-NL | SMT | Exp 1, 3 |
-| TraineeDetection | Empirical compendium (multiple sources) | -- | ES-EN | Generic | Exp 1 |
-| Yamada2019 | Yamada (2019), *JoSTrans* | 28 students | EN-JA | Google NMT + Moses SMT | Exp 1, 2 |
-| Popovic2018 | Popovic (2018) | -- | EN-DE, EN-SR | NMT + PBMT | Exp 1 |
-| Bentivogli2018 | Bentivogli et al. (2018) | -- | EN-DE, EN-FR | NMT vs best PBMT | Exp 2 |
-| VanBrussel2018 | Van Brussel et al. (2018), SCATE corpus | -- | EN-NL | NMT vs SMT | Exp 2 |
-| Koponen2019 | Koponen, Salmi & Nikulin (2019) | 33 students | EN-FI | NMT, SMT, RBMT | Exp 2, 4 |
-| Stasimioti2021 | Stasimioti & Sosoni (2021) | 20 (10 exp + 10 nov) | EN-EL | NMT | Exp 3 |
-| DeAlmeida2013 | De Almeida (2013) | 20 | EN-FR, EN-PT-BR | -- | Exp 3, 4 |
-| KoponenSalmi2017 | Koponen & Salmi (2017) | 5 students | EN-FI | -- | Exp 4 |
-| NitzkeGros2020 | Nitzke & Gros (2020) | -- | -- | -- | Exp 4 |
-| MellingerShreve2016 | Mellinger & Shreve (2016) | -- | -- | TM | Exp 4 |
-
-### 3.2 Data Encoding
-
-Each source was encoded into a structured Python dict following the extraction template from the spec (Section 8.2), including:
-- Error types with their ToM skill mapping
-- Quantitative measures (correction rates, fixation durations, edit proportions, error counts)
-- Qualitative findings where exact values were unavailable
-- Notes on mapping ambiguities
-
-### 3.3 Temnikova 2010: Rationale for Sensitivity Analysis
-
-Temnikova (2010) provides a 10-level difficulty ranking for PE error types, validated cross-linguistically with 92% inter-annotator agreement. However, two known anomalies complicate its use:
-
-1. **Rank 2 ("incorrect style synonym")** maps to S6 (2nd_reader ToM) but is ranked as the second easiest to correct. This likely reflects that *correcting* a style issue is mechanically simple (swap one word) even though *detecting* it requires reader modelling.
-2. **Ranks 7-8 ("wrong/missing punctuation")** map to S1 (lowest ToM) but are ranked among the hardest. This reflects the arbitrary, rule-specific nature of punctuation conventions rather than cognitive complexity.
-
-These anomalies measure PE *correction effort* rather than *detection difficulty*. Since the ToM framework primarily predicts detection difficulty, a second run excluding Temnikova tests whether the correlation strengthens when this construct mismatch is removed.
+- 13 findings from 9 distinct sources.
+- 2 findings rest on an inferential test; 0 of them reach p < 0.05.
+- Analysis 1 (difficulty ordering) has no quantitative test: no verified source reports detection difficulty by error type.
+- **Analysis1_DifficultyOrdering**: NOT TESTED QUANTITATIVELY: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering.
+- **Analysis2_FluencyParadox**: 5 supporting, 1 mixed and 1 contrary findings from 5 sources. No finding rests on an inferential test.
+- **Analysis4_OverEditing**: 2/2 sources with per-type rates show the predicted negative tau under both mappings; none is significant. Nitzke & Gros and Mellinger & Shreve are not counted until verified.
 
 ---
 
-## 4. Experiment 1: ToM Ordering vs Published Difficulty Rankings
+## 2. Data Revision (2026-10)
 
-### 4.1 Prediction
+The source data were re-extracted from the full texts in October 2026. The earlier encoding required every source to yield per-category numbers on a comparable scale; where a source did not report in that shape, values were filled in. The verified module enforces three rules:
 
-Error types requiring higher-order ToM are harder to detect and require more cognitive effort. Formally: Kendall's tau > 0 between ToM ordinal rank and observed difficulty rank.
+1. **No value without provenance.** Every numeric value names its table or page and the measure the source actually reports.
+2. **Qualitative findings stay qualitative.** A direction reported without per-category figures is counted as a finding, never used as input to a correlation.
+3. **Deletions are recorded.** Every dropped encoding is listed below with the reason.
 
-### 4.2 Method
+### 2.1 Withdrawn encodings
 
-For each source:
-1. Extract the difficulty/effort measure per error type
-2. Map error types to ToM ranks
-3. Compute Kendall's tau between ToM rank and observed difficulty
-
-Difficulty proxies by source:
-- **Temnikova2010**: Published difficulty rank (1-10)
-- **Daems2017**: Fixation duration rank (eye-tracking proxy for cognitive load)
-- **TraineeDetection**: 1 - detection rate (lower detection = harder)
-- **Yamada2019**: 1 - NMT correction rate (lower correction = harder)
-- **Popovic2018**: NMT error rate (higher residual error = harder to eliminate)
-
-### 4.3 Results: Full Run (all 5 sources)
-
-| Source | N (types) | Kendall's tau | p-value | Direction |
-|---|---|---|---|---|
-| Temnikova2010 | 10 | 0.025 | 0.926 | + (barely) |
-| Daems2017 | 5 | **1.000** | **0.017** | + (perfect) |
-| TraineeDetection | 3 | 1.000 | 0.333 | + (perfect, n too small) |
-| Yamada2019 | 4 | 0.913 | 0.071 | + (strong trend) |
-| Popovic2018 | 5 | 0.447 | 0.296 | + (moderate) |
-
-**Aggregate:**
-- Pooled tau: **0.216** (p = 0.147) -- positive trend, not significant
-- Weighted tau (Fisher z-transform): **0.592**
-- Sources with positive tau: **5/5** (100%)
-
-**Interpretation:** All sources show the predicted positive direction, but pooled significance is diluted by Temnikova's near-zero tau (0.025). The weighted tau (0.592) is moderate-to-strong, indicating the effect is robust when accounting for the construct mismatch in Temnikova.
-
-### 4.4 Results: No-Temnikova Run (4 sources)
-
-| Source | N (types) | Kendall's tau | p-value | Direction |
-|---|---|---|---|---|
-| Daems2017 | 5 | **1.000** | **0.017** | + |
-| TraineeDetection | 3 | 1.000 | 0.333 | + |
-| Yamada2019 | 4 | 0.913 | 0.071 | + |
-| Popovic2018 | 5 | 0.447 | 0.296 | + |
-
-**Aggregate:**
-- Pooled tau: **0.386** (p = **0.044**) -- **significant at alpha = 0.05**
-- Weighted tau: **0.919**
-- Sources with positive tau: **4/4** (100%)
-
-**Interpretation:** With Temnikova excluded, the pooled correlation reaches statistical significance. The weighted tau (0.919) is near-perfect, driven by the strong individual correlations in Daems, Trainee Detection, and Yamada.
-
-### 4.5 Comparison
-
-| Metric | Full | No-Temnikova | Change |
+| Encoding | Was | Reason | Replacement (in `published_data.py`) |
 |---|---|---|---|
-| Pooled tau | 0.216 | 0.386 | +0.170 |
-| Pooled p | 0.147 | **0.044** | Becomes significant |
-| Weighted tau | 0.592 | 0.919 | +0.327 |
-| Sources positive | 5/5 | 4/4 | Both 100% |
+| Daems2017.fixation_rank | [1,2,3,4,5] for S1,S2,S3,S6,S7 — identical to ToM rank | No per-error-type difficulty ranking exists in the source. Fixation duration was not significantly predicted by MT quality at all; the authors suggest it may be a poor effort measure. tau=1.000 in Analyses 1 and 3 was arithmetic, not a finding. | Qualitative: grammatical errors predict technical and product effort; coherence and meaning shifts predict cognitive effort (fixations, duration). A dissociation along the hierarchy. |
+| Koponen2015.performance_by_session | Five smooth monotone series over six sessions | The source is a course-description paper: 7 lectures, 5 assignments, thematic analysis of 13 reflective essays. It contains no per-type or per-session performance data and states that no detailed analysis of the students' edits was performed. | Qualitative only: students reported difficulty distinguishing PE quality levels and that they were likely correcting too much. |
+| Koponen2019.measures[*].unnecessary_pct | word form 42, substitution 25, omission 10, insertion 45 | INVERTS the source. Table 5 gives insertions as the most necessary edit type (26% unnecessary) and order changes the least (59%). The encoded values produced tau=+0.183 and all three contradictions in the convergence table. | Verified rates above. |
+| Koponen2019.measures[*].nmt_overlooked/smt_overlooked | Per-type counts 5/15/20/4/5 and 12/18/16/5/5 | The source reports system totals only (49/56/80). The decomposition was fabricated and reversed the source's aggregate direction. | System totals above, flagged as running against the prediction. |
+| KoponenSalmi2017.measures[*].pct_of_unnecessary | 0.40/0.25/0.20/0.10/0.05, summing to exactly 1.00 | The source reports unnecessary RATES per edit type, not shares of a total, and has no style (S6) or discourse (S7) categories at all. | Verified rates above. |
+| Bentivogli2018.measures[*].nmt_reduction_pct | Morphology 50, Reordering 45, Lexical 15, Omission/Addition -10 | Real reductions are -31.7/-41.4, -40.9/-48.4, -16.9/-27.1. The source has no omission/addition category, so the -10 value that carried the S4 claim does not exist. | Verified reductions above. |
+| VanBrussel2018.measures[*].nmt_count/smt_count | 45/120, 38/95, 72/90, 35/30, 25/5 | Real counts differ throughout, and the encoded omission figures reversed the source: NMT has FEWER omissions than PBMT (62 vs 115), not more. | Verified counts and the omission-visibility data above. |
+| Popovic2018.measures[*].nmt_rate/pbmt_rate | 0.12/0.25, 0.08/0.18, 0.22/0.28, 0.15/0.12, 0.20/0.22 | The source reports language-related issues per segment, not MQM error-category rates. No correspondence to the encoded categories. | Qualitative findings above. |
+| Yamada2019.measures[*].nmt_correction/smt_correction | 0.78/0.82 (X4 Grammar), 0.62/0.75 (X1 Addition), 0.58/0.73 (X2 Omission), 0.65/0.76 (X3 Mistranslation) | The source reports error DISTRIBUTIONS (Figures 1-2), not correction rates by error type. It has three tables only: effort, raw error counts, and overall PE quality. The old header cited 'Tables 4-6', which do not exist. The category labels were also wrong: X2 is content addition, not omission, and there is no 'X4 Grammar' (X4a is untranslated, X4b too literal, X9 syntax). | Aggregate correction rates 0.777 and 0.68, plus qualitative findings. Removes Yamada from Analysis 1 entirely. |
+| DeAlmeida2013.measures[*].experienced_rate/novice_rate | 0.85/0.60 (S3) and 0.70/0.55 (S1) | The thesis reports proportions of item categories, not per-experience rates by ToM proxy. | Verified aggregates above. |
 
-The Temnikova anomalies (punctuation ranked hard, style synonym ranked easy) suppress the pooled tau because they measure correction effort rather than detection difficulty. Removing this source eliminates the construct mismatch and reveals a significant correlation.
-
----
-
-## 5. Experiment 2: Fluency Paradox as ToM-Selective Detection Impairment
-
-### 5.1 Prediction
-
-NMT's fluency improvement selectively impairs detection of high-ToM errors (S3+) while leaving low-ToM detection (S1-S2) unaffected. Formally: NMT improvement ratio for low-ToM > NMT improvement ratio for high-ToM.
-
-### 5.2 Method
-
-For each source comparing NMT to SMT/PBMT output:
-1. Compute the NMT improvement for each error type
-2. Group by low-ToM (S1-S2) vs high-ToM (S3+)
-3. Test whether improvement is asymmetric
-
-### 5.3 Results (identical in both runs -- Temnikova not used here)
-
-| Source | Low-ToM Improvement | High-ToM Improvement | Asymmetry | Confirmed |
-|---|---|---|---|---|
-| Yamada2019 | Drop: 0.04 | Drop: 0.13 | 0.09 | Yes |
-| Bentivogli2018 | 47.5% reduction | 2.5% reduction | 45.0 pp | Yes |
-| VanBrussel2018 | 61.3% improvement | -132.2% (worse) | 193.5 pp | Yes |
-| Koponen2019 | -7 overlooked change | 0 overlooked change | 7 | Yes |
-
-**Aggregate:** 4/4 sources confirmed (100%).
-
-**Interpretation:** Every source shows the predicted asymmetry. NMT substantially reduces low-ToM (surface, grammar) errors but fails to improve -- or actively worsens -- high-ToM (meaning, omission, pragmatic) error detection. Van Brussel (2018) is particularly striking: NMT introduced a new "semantically unrelated" mistranslation category absent in SMT, while halving fluency errors.
-
-### 5.4 Key Insight
-
-The fluency paradox has been described qualitatively in the literature ("NMT produces more fluent but not more accurate output") but never attributed to a cognitive mechanism. The ToM framework provides that mechanism: fluent surface form satisfies the post-editor's 1st-order machine model ("the MT output reads well"), disengaging the higher-order ToM processes needed to detect meaning-level errors.
+Results produced from the earlier encoding (the former convergence table, the Analysis 1 rank correlations, Analyses 3 and 3b) are superseded and should not be cited. They remain in the git history for audit.
 
 ---
 
-## 6. Experiment 3: Experience x ToM Interaction
+## 3. Framework: MQM-to-ToM Mapping
 
-### 6.1 Prediction
-
-The expert-novice performance gap widens with ToM level. Experts outperform novices most on high-ToM errors and least on low-ToM errors. Formally: positive correlation between ToM rank and expert-novice gap magnitude.
-
-### 6.2 Method
-
-For sources with per-type expert/novice data:
-1. Compute the gap per error type (expert performance - novice performance)
-2. Correlate gap magnitude with ToM rank
-
-### 6.3 Results (identical in both runs)
-
-| Source | N (types) | Kendall's tau | p-value | Confirmed |
-|---|---|---|---|---|
-| Daems2017 | 5 | **1.000** | **0.017** | Yes |
-| DeAlmeida2013 | 2 | 1.000 | 1.000 | Yes (direction only) |
-| Stasimioti2021 | -- | -- | -- | Qualitative support |
-
-**Aggregate:** 2/2 sources with per-type data confirmed.
-
-**Daems2017 detail (critical source):**
-
-| Error Type | Skill | ToM Rank | Professional Effort | Student Effort | Gap |
-|---|---|---|---|---|---|
-| Agreement/spelling | S1 | 1 | Low | High (HTER) | -2 |
-| Grammar/structural | S2 | 2 | Low | Moderate | -1 |
-| Meaning shift | S3 | 3 | Moderate | Moderate | 0 |
-| Style | S6 | 4 | Moderate | Low | +1 |
-| Coherence | S7 | 5 | High | None | **+3** |
-
-The gap pattern is monotonically increasing (tau = 1.0, p = 0.017):
-- **Low-ToM (S1-S2):** Students actually invest *more* effort than professionals (negative gap). They over-respond to surface errors mechanically.
-- **Mid-ToM (S3):** Parity between groups.
-- **High-ToM (S6-S7):** Professionals engage deeply while students show minimal or no engagement. For coherence (S7), professionals showed increased fixation duration while students showed *none* -- they didn't detect the error at all.
-
-### 6.4 Key Insight
-
-Expertise in PE is not a uniform scaling of all abilities. It is structured by ToM level: becoming expert means developing progressively higher-order perspective-taking capacity, from modelling the MT system (1st order) to modelling the source author's intent (2nd order) to modelling the target reader's inference (3rd order).
-
----
-
-## 7. Experiment 4: Over-Editing as Misdirected ToM
-
-### 7.1 Prediction
-
-Unnecessary edits concentrate on low-ToM dimensions (S1-S2). Over-editing is rare on high-ToM dimensions. Formally: negative tau between ToM rank and unnecessary edit proportion.
-
-### 7.2 Method
-
-For sources reporting unnecessary/preferential edits:
-1. Categorise unnecessary edits by ToM level
-2. Test whether the proportion decreases with ToM rank
-
-### 7.3 Results (identical in both runs)
-
-**Sources with per-type data:**
-
-| Source | N (types) | Kendall's tau | p-value | Confirmed |
-|---|---|---|---|---|
-| KoponenSalmi2017 | 5 | **-0.949** | **0.023** | Yes |
-| Koponen2019 | 4 | +0.183 | 0.718 | No |
-| NitzkeGros2020 | 5 | -0.800 | 0.083 | Yes (trend) |
-
-**Sources with qualitative data:**
-
-| Source | Finding | Confirmed |
-|---|---|---|
-| DeAlmeida2013 | 16-25% unnecessary; most experienced made more preferential (surface) changes | Yes |
-| MellingerShreve2016 | 60% of perfect TM matches changed unnecessarily (false alarms on clean segments) | Yes |
-
-**Aggregate:** 4/5 sources confirmed. 2/3 per-type sources show negative tau. Mean tau = -0.522.
-
-**KoponenSalmi2017 detail:**
-
-| Edit Type | Skill | ToM Group | % of Unnecessary |
+| Skill | ToM level | Rank | MQM categories |
 |---|---|---|---|
-| Word-order changes | S2 | Low | 40% |
-| Pronoun deletions | S2 | Low | 25% |
-| Lexical substitutions | S3 | High | 20% |
-| Style changes | S6 | High | 10% |
-| Structural rewrites | S7 | High | 5% |
+| S1 Surface | 1st_machine (form) | 1 | Spelling, Punctuation |
+| S2 Grammar | 1st_machine (form) | 2 | Grammar, Word form |
+| S3 Meaning | 1st_machine (meaning) | 3 | Mistranslation, Wrong sense, False cognate, Number |
+| S4 Completeness | 1st_author | 4 | Omission, Addition, Untranslated |
+| S5 Terminology | 2nd_reader | 4 | Terminology |
+| S6 Pragmatic | 2nd_reader | 4 | Register, Style, Locale |
+| S7 Discourse | recursive | 5 | Coherence, Cohesion, Connectives |
 
-Low-ToM edits account for **65%** of all unnecessary edits. The proportion drops monotonically from S2 to S7 (tau = -0.949, p = 0.023).
-
-**Koponen2019 exception:** Deletions (S4) and insertions (S4) show high unnecessary rates (35% and 45%), breaking the monotonic decrease. This may reflect that completeness edits (adding/removing words) are mechanically easy to execute even when unnecessary, similar to the Temnikova correction-vs-detection distinction.
-
-### 7.4 Key Insight
-
-Over-editing is not random or uniform. It is the behavioural signature of a post-editor who has developed a strong 1st-order machine model ("I know what MT errors look like") without the corresponding author model ("but the MT got it right this time"). This has direct pedagogical implications: training should include clean-segment exercises to calibrate the machine model against reality.
+- Ordinal scale: S1=1, S2=2, S3=3, S4=S5=S6=4 (tied), S7=5.
+- Low-ToM = S1–S2; high-ToM = S3 and above.
+- Mapping sensitivity: The edit type 'deleted' has two defensible ToM assignments. In both sources most deletions are optional subject pronouns, which is a target-language grammar matter (S2); but deletion removes content, which bears on completeness (S4). Both assignments are reported for Analysis 4.
 
 ---
 
-## 8. Experiment 5: Integrative Convergence Table
+## 4. Sources
 
-### 8.1 Method
+### 4.1 Verified sources
 
-Synthesise findings from Experiments 1-4 into a single convergence table. Each cell indicates whether a published finding aligns (V), partially aligns (~), contradicts (X), or lacks data (-) for the framework's prediction at that skill level.
+| Source | Citation | Pairs | Participants | Measure |
+|---|---|---|---|---|
+| Bentivogli2018 | Bentivogli, Bisazza, Cettolo & Federico (2018), Computer Speech & Language 49:52-70 | EN-DE, EN-FR | — | relative error reduction, NMT vs PBMT, from HTER-based error classes |
+| DeAlmeida2013 | de Almeida (2013), doctoral thesis, Dublin City University | EN-FR, EN-PT-BR | 20 | proportion of recorded items by change category |
+| Koponen2019 | Koponen, Salmi & Nikulin (2019), Machine Translation 33(1-2):61-90 | EN-FI | 33 students | proportion of edits of this type correct but unnecessary |
+| KoponenSalmi2017 | Koponen & Salmi (2017), Linguistica Antverpiensia 16:137-148 | EN-FI | 5 students | proportion of edits of this type judged unnecessary |
+| Popovic2018 | Popović (2018), Machine Translation 32(3):237-253 | DE-EN, EN-DE, EN-SR | — | language-related issues per segment — NOT MQM error categories |
+| VanBrussel2018 | Van Brussel, Tezcan & Macken (2018), LREC 2018 | EN-NL | — | annotated error counts by category |
+| Yamada2019 | Yamada (2019), The Journal of Specialised Translation 31:87-106 | EN-JA | 28 students | error correction rate, major errors only |
 
-### 8.2 Results: Full Run
+### 4.2 Assignment to analyses
 
-| Metric | Count |
+| Analysis | Sources |
 |---|---|
-| Aligns (V) | 44 |
-| Partial (~) | 29 |
-| Contradicts (X) | 3 |
-| No data (-) | 43 |
-| **Convergence ratio V/(V+X)** | **93.6%** |
-| Binomial p (vs chance) | < 0.0001 |
+| analysis_1_difficulty | Daems2017 (qualitative), Popovic2018 (qualitative) |
+| analysis_2_fluency | Yamada2019, Bentivogli2018, VanBrussel2018, Popovic2018 (qualitative), Koponen2019 (AGAINST) |
+| analysis_3_expertise | none (withdrawn) |
+| analysis_3b_development | none (withdrawn) |
+| analysis_4_overediting | KoponenSalmi2017, Koponen2019, DeAlmeida2013, NitzkeGros2020 (aggregates only), MellingerShreve2016 (aggregates only), Koponen2015 (qualitative) |
 
-### 8.3 Results: No-Temnikova Run
+### 4.3 Not verified, not counted
 
-| Metric | Count |
+| Source | Status |
 |---|---|
-| Aligns (V) | 44 |
-| Partial (~) | 23 |
-| Contradicts (X) | 3 |
-| No data (-) | 42 |
-| **Convergence ratio V/(V+X)** | **93.6%** |
-| Binomial p (vs chance) | < 0.0001 |
-
-### 8.4 Contradictions
-
-Only 3 cells show contradictions, all in Experiment 4 (over-editing), all from Koponen2019:
-- **S2:** Koponen2019 shows positive tau (S2 word form changes have highest unnecessary rate, but other S4 categories are also high)
-- **S3 and S4:** Same source -- deletions and insertions (S4) show elevated unnecessary rates
-
-These contradictions are localised to one source and one phenomenon (completeness edits being easy to execute regardless of necessity). They do not undermine the overall framework.
-
-### 8.5 Comparison
-
-The convergence ratio is identical across both runs (93.6%). Temnikova's removal does not affect the convergence table because its cells were scored as partial (~) rather than contradictions (X). The primary impact of excluding Temnikova is on Experiment 1's statistical significance, not on the convergence assessment.
+| NitzkeGros2020 | Aggregates (1 unnecessary change per 22.3 words; 45.16 preferential per 1008 words) look transcribed. The per-category shares 0.30/0.35/0.20/0.10/0.05 sum to exactly 1.00 and follow the fabrication signature. Do not use the shares. |
+| MellingerShreve2016 | 60% of exact TM matches changed; 74% of fuzzy matches corrected. Look transcribed; unread. |
+| Stasimioti2021 | Contributes no per-type data. Reference not located; not cited in the paper. |
+| Temnikova2010 | Excluded for construct mismatch (correction effort, not detection). |
 
 ---
 
-## 9. Summary of Findings
+## 5. Analysis 1: ToM Ordering vs. Detection Difficulty
 
-| Experiment | Prediction | Full Run | No-Temnikova | Verdict |
+**Prediction.** Higher-ToM error types are harder to detect.
+
+**Status.** Qualitative only. The rank correlations reported previously rested on values withdrawn in Section 2.1 (Daems fixation ranks, Yamada per-type correction rates, Popović category rates, Temnikova ranks).
+
+| Source | Direction | Basis | Finding | Location |
 |---|---|---|---|---|
-| Exp 1: Difficulty Ordering | tau > 0 | tau=0.216, p=0.147 | tau=0.386, **p=0.044** | Confirmed (no-Temnikova) |
-| Exp 2: Fluency Paradox | Low-ToM improvement > High-ToM | 4/4 confirmed | 4/4 confirmed | Confirmed |
-| Exp 3: Experience x ToM | Gap widens with ToM | 2/2 confirmed (tau=1.0) | 2/2 confirmed | Confirmed |
-| Exp 4: Over-Editing | Concentrates on low-ToM | 4/5 confirmed | 4/5 confirmed | Confirmed |
-| Exp 5: Convergence | Ratio > 0.80 | **93.6%** (p<0.0001) | **93.6%** (p<0.0001) | Strong validation |
+| Daems2017 | support | qualitative | Qualitative: grammatical errors predict technical and product effort; coherence and meaning shifts predict cognitive effort (fixations, duration). A dissociation along the hierarchy. | Daems et al. (2017), regression models by error type |
+| Popovic2018 | support | qualitative | NMT is worse than PBMT on ambiguous source words (S3) in every direction while better on verb forms and order (S2). | Table 2 |
 
-### 9.1 Effect of Excluding Temnikova
+**Interpretation.** NOT TESTED QUANTITATIVELY: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering.
 
-| Metric | Full | No-Temnikova | Impact |
+---
+
+## 6. Analysis 2: Fluency Paradox
+
+**Prediction.** NMT reduces low-ToM errors more than high-ToM errors, and post-editors catch fewer of the errors that remain.
+
+**Method.** For sources with verified per-category error data, each high-ToM category's relative error change under NMT is compared with the mean low-ToM change. A source supports the prediction if every high-ToM category fell less than the low-ToM categories (or rose), contradicts it if none did, and is mixed otherwise. Aggregate and qualitative findings are recorded with the direction the source reports. No inferential test is applied: per-category counts from one corpus are not independent observations.
+
+### 6.1 Findings
+
+| Source | Direction | Basis | Finding | Location |
+|---|---|---|---|---|
+| Yamada2019 | support | numeric descriptive | Students corrected 77.7% of major errors in SMT output but 68% in NMT output. | Table 3 |
+| Bentivogli2018 | support | numeric descriptive | NMT reduced word-order and morphology errors (S2) more than lexical errors (S3), in both language pairs. | Section 5 and Conclusions |
+| Bentivogli2018 | support | numeric descriptive | Lexical errors' share of residual errors rises from PBMT to NMT (EnDe 72.1% -> 76.9%, EnFr 74.5% -> 79.0%). | Section 5 |
+| VanBrussel2018 | mixed | numeric descriptive | Error counts NMT vs PBMT: grammar (S2) fell 72%; 4/5 high-ToM categories fell less or rose (exception: addition). | Tables 1, 3, 4, 7, 9 |
+| VanBrussel2018 | support | numeric descriptive | Omissions with no trace in the target: RBMT 7%, PBMT 23%, NMT 69%. In NMT, fluency no longer signals that source content is missing. | Table 6 |
+| Popovic2018 | support | qualitative | NMT better on verb forms, order, compounds; worse on prepositions and ambiguous source words in every direction. | Table 2 |
+| Koponen2019 | against | numeric descriptive | Overlooked necessary corrections: NMT 2.2%, SMT 2.7%, RBMT 3.3% of unedited words. NMT has the fewest. | Section 4.1, closing paragraph |
+
+### 6.2 Bentivogli et al. (2018): relative error change, NMT vs PBMT
+
+| Pair | Error class | Skill | Change |
 |---|---|---|---|
-| Exp 1 pooled tau | 0.216 | 0.386 | +79% increase |
-| Exp 1 pooled p | 0.147 | 0.044 | Becomes significant |
-| Exp 1 weighted tau | 0.592 | 0.919 | +55% increase |
-| Exp 2-4 | Unchanged | Unchanged | Temnikova not used |
-| Convergence ratio | 93.6% | 93.6% | Unchanged |
+| EnDe | Word order | S2 | -41% |
+| EnDe | Morphology | S2 | -32% |
+| EnDe | Lexical | S3 | -17% |
+| EnFr | Word order | S2 | -48% |
+| EnFr | Morphology | S2 | -41% |
+| EnFr | Lexical | S3 | -27% |
 
-The sensitivity analysis confirms that Temnikova's anomalies arise from a construct mismatch (correction effort vs detection difficulty), not from a failure of the ToM framework. When this source is excluded, Experiment 1 achieves significance while all other results remain unchanged.
+Caveat: The source uses three coarse classes only (lexical, morphology, word order) and folds missing and extra words into 'lexical'. There is no omission/addition category, so no S4 value can be taken from it.
+
+### 6.3 Van Brussel et al. (2018): error counts by category
+
+| Category | Skill | RBMT | PBMT | NMT | NMT vs PBMT | NMT vs RBMT |
+|---|---|---|---|---|---|---|
+| fluency_grammar | S2 | 864 | 932 | 260 | -72% | -70% |
+| fluency_lexicon | S3 | 533 | 235 | 358 | +52% | -33% |
+| mistranslation | S3 | 972 | 483 | 330 | -32% | -66% |
+| semantically_unrelated | S3 | 0 | 9 | 44 | +389% | new (from 0) |
+| omission | S4 | 43 | 115 | 62 | -46% | +44% |
+| addition | S4 | 61 | 39 | 2 | -95% | -97% |
+
+Against PBMT (primary): mixed. Against RBMT (secondary, not counted): mixed.
+
+**Interpretation.** 5 supporting, 1 mixed and 1 contrary findings from 5 sources. No finding rests on an inferential test.
+
+*Contrary evidence (Koponen2019).* NMT has the FEWEST overlooked necessary corrections. At the only level the source reports, this runs counter to the fluency-paradox prediction. Report it; do not drop it.
 
 ---
 
-## 10. Statistical Tests Summary
+## 7. Analyses 3 and 3b: Withdrawn
 
-| Experiment | Primary Test | N | Result (full) | Result (no-Temnikova) |
+- **Analysis 3.** Expertise: no inferential source survives verification.
+- **Analysis 3b.** Development: Koponen (2015) contains no per-type or per-session data.
+
+---
+
+## 8. Analysis 4: Over-Editing as Misdirected ToM
+
+**Prediction.** Unnecessary edits concentrate on low-ToM types; negative tau between ToM rank and unnecessary-edit rate.
+
+**Method.** For sources reporting the rate at which edits of each type were unnecessary, Kendall's τ-b between ToM rank and that rate (two-sided p). Deletions are assigned to S2 (primary) and to S4 (alternative); both are reported.
+
+### 8.1 Findings
+
+| Source | Direction | Basis | Finding | Location |
 |---|---|---|---|---|
-| Exp 1 | Kendall's tau (pooled) | 27 / 17 | tau=0.216, p=0.147 | tau=0.386, p=0.044 |
-| Exp 2 | Paired low-vs-high comparison | 4 sources | 4/4 confirmed | 4/4 confirmed |
-| Exp 3 | Kendall's tau (per-source) | 5 / 2 types | tau=1.0, p=0.017 | tau=1.0, p=0.017 |
-| Exp 4 | Kendall's tau (per-source) | 5 / 4 / 5 types | Mean tau=-0.522 | Mean tau=-0.522 |
-| Exp 5 | Binomial test on convergence | 47 cells | 93.6%, p<0.0001 | 93.6%, p<0.0001 |
+| KoponenSalmi2017 | support | numeric test | Unnecessary-edit rate falls with ToM rank (deleted=S2: tau=-0.598, p=0.166, deleted=S4: tau=-0.224, p=0.602); not significant under either mapping. Ranks span S2-S4 only. | Section 5, Discussion |
+| Koponen2019 | support | numeric test | Unnecessary-edit rate falls with ToM rank (deleted=S2: tau=-0.598, p=0.166, deleted=S4: tau=-0.224, p=0.602); not significant under either mapping. Ranks span S2-S4 only. | Table 5, NMT panel |
+| DeAlmeida2013 | mixed | numeric descriptive | Preferential changes were 15.59% (EN-PT-BR) to 24.56% (EN-FR) of recorded items; the most experienced translators made the most preferential changes. | Sections 4.9.1 and 4.9.2 (pp. 191-195) |
+| Koponen2015 | uninformative | qualitative | Qualitative only: students reported difficulty distinguishing PE quality levels and that they were likely correcting too much. | Koponen (2015), thematic analysis of reflective essays |
 
-**Multiple comparisons:** Five experiments. Per-source results reported separately (independent replications, no correction needed). Aggregate convergence test (Exp 5) uses a single summary statistic. Bonferroni correction across 5 aggregate tests: p < 0.01 required; all significant results survive this threshold.
+### 8.2 Rank correlations under both mappings
+
+| Source | Mapping | n | τ | p |
+|---|---|---|---|---|
+| KoponenSalmi2017 | deleted = S2 | 5 | -0.598 | 0.166 |
+| KoponenSalmi2017 | deleted = S4 | 5 | -0.224 | 0.602 |
+| Koponen2019 | deleted = S2 | 5 | -0.598 | 0.166 |
+| Koponen2019 | deleted = S4 | 5 | -0.224 | 0.602 |
+
+### 8.3 Per-type unnecessary-edit rates
+
+| Source | Edit type | Skill (primary) | Unnecessary | Edits |
+|---|---|---|---|---|
+| KoponenSalmi2017 | Word-order changes | S2 | 80% | — |
+| KoponenSalmi2017 | Deletions | S2 | 70% | — |
+| KoponenSalmi2017 | Word substitutions | S3 | 33% | — |
+| KoponenSalmi2017 | Word-form changes | S2 | 30% | — |
+| KoponenSalmi2017 | Insertions | S4 | 16% | — |
+| Koponen2019 | Order changed | S2 | 59% | 123 |
+| Koponen2019 | Deleted | S2 | 38% | 290 |
+| Koponen2019 | Word substituted | S3 | 35% | 404 |
+| Koponen2019 | Form changed | S2 | 32% | 493 |
+| Koponen2019 | Inserted | S4 | 26% | 357 |
+
+Note: Identical for both sources, because the two studies produce the same ordering of edit types by unnecessary rate. Report both mappings; the result is directionally stable and neither is significant. Ranks span S2–S4 only; neither source has S1, S5–S7 categories.
+
+**Interpretation.** 2/2 sources with per-type rates show the predicted negative tau under both mappings; none is significant. Nitzke & Gros and Mellinger & Shreve are not counted until verified.
 
 ---
 
-## 11. Figures
+## 9. Evidence Ledger
 
-All figures are generated automatically by the experiment pipeline and saved to `outputs/ectel/` (full run) and `outputs/ectel/no_temnikova/` (sensitivity run).
+The ledger replaces the former category-by-analysis convergence table and its convergence ratio. Findings differ in basis and measure, so they are counted, not pooled, and no ratio or binomial test is computed.
 
-| Figure | Description | File |
-|---|---|---|
-| F4 | ToM rank vs observed difficulty (scatter, per source) | `F4_difficulty_scatter.png` |
-| F5 | Fluency paradox: NMT improvement by ToM level (bar chart) | `F5_fluency_asymmetry.png` |
-| F6 | Convergence heatmap (skill x experiment) | `F6_convergence_heatmap.png` |
-| Supp | Over-editing concentration by ToM level (bar chart) | `F_exp4_overediting.png` |
+| Direction | numeric test | numeric descriptive | qualitative | Total |
+|---|---|---|---|---|
+| support | 2 | 4 | 3 | 9 |
+| mixed | 0 | 2 | 0 | 2 |
+| against | 0 | 1 | 0 | 1 |
+| uninformative | 0 | 0 | 1 | 1 |
+
+Counts of findings, not of independent tests. A source can contribute more than one finding, and to more than one analysis.
+
+Sources contributing to more than one analysis: Koponen2019, Popovic2018.
 
 ---
 
-## 12. Reproducibility
+## 10. Limitations
 
-### Running the experiments
+- Only 2 findings rest on an inferential test, and none reaches significance. The retrospective evidence is directional, not confirmatory.
+- The difficulty gradient (Analysis 1) has no quantitative support in the verified literature.
+- Measures differ between sources and are not commensurable; directions are compared, magnitudes are not.
+- Nitzke & Gros (2020) and Mellinger & Shreve (2016) are excluded pending verification; Stasimioti & Sosoni (2021) contributes no data.
+- The direction rule in Analysis 2 counts consistent comparisons; it does not weight categories by size.
+
+---
+
+## 11. Outputs and Reproducibility
+
+| File | Contents |
+|---|---|
+| `all_results.json` | Structured results for every analysis and the ledger |
+| `Experiment_Report.md` | This report |
+| `F5_fluency_paradox.png` | Analysis 2: relative error change by category; omission visibility |
+| `F7_overediting.png` | Analysis 4: unnecessary-edit rate by edit type, both mappings |
+| `T_evidence_ledger.tex` | LaTeX evidence-ledger table |
 
 ```bash
-# Full run (all sources)
-python -m experiments.ectel.run_all --tag full
-
-# Sensitivity run (excluding Temnikova)
-python -m experiments.ectel.run_all --exclude Temnikova2010 --tag no_temnikova
-
-# Exclude multiple sources
-python -m experiments.ectel.run_all --exclude Temnikova2010 Popovic2018 --tag custom
+python -m experiments.retroactive_validation.run_all            # full run, writes this report
+python -m experiments.retroactive_validation.run_all --exclude Koponen2019   # sensitivity
+python scripts/generate_retroactive_report.py                    # rebuild report from JSON
 ```
 
-### Output structure
-
-```
-outputs/ectel/
-  all_results.json          # Full structured results
-  F4_difficulty_scatter.png  # Exp 1 figure
-  F5_fluency_asymmetry.png   # Exp 2 figure
-  F6_convergence_heatmap.png # Exp 5 figure
-  F_exp4_overediting.png     # Exp 4 figure
-  T_convergence.tex          # LaTeX convergence table
-  no_temnikova/              # Sensitivity run outputs
-    all_results.json
-    F4_difficulty_scatter.png
-    ...
-```
-
-### Dependencies
-
-- Python 3.10+
-- scipy >= 1.12 (Kendall's tau, binomial test)
-- numpy >= 1.24
-- matplotlib >= 3.8
-
-### Source code
-
-```
-experiments/ectel/
-  run_all.py               # Orchestrator with --exclude flag
-  tom_mapping.py            # MQM-to-ToM mapping (Spec Section 2)
-  exp1_difficulty_ordering.py
-  exp2_fluency_paradox.py
-  exp3_experience_interaction.py
-  exp4_overediting.py
-  exp5_convergence.py
-  visualizations.py         # Publication-quality figures
-  data/
-    published_data.py       # All 14 sources encoded as structured dicts
-```
+Environment at generation: Python 3.11.9, SciPy 1.17.1, NumPy 1.26.4, Matplotlib 3.10.8.

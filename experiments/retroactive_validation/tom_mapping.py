@@ -1,4 +1,4 @@
-"""MQM-to-ToM mapping (ECTEL Spec §2).
+"""MQM-to-ToM mapping (ToM Experimental Spec §2).
 
 Defines the 7-skill / ToM-level model and mapping rules for external studies.
 """

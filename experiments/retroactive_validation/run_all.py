@@ -1,15 +1,17 @@
-"""EC-TEL 2026 Experiment Orchestrator.
+"""Retroactive validation experiment orchestrator.
 
-Runs all 5 retroactive validation experiments and produces:
-- JSON results (per-experiment + combined)
-- Publication-quality figures (F4, F5, F6 + supplementary)
-- LaTeX convergence table
-- Console summary
+Runs the analyses that the verified source data support and produces:
+- JSON results (per-analysis + evidence ledger)
+- Figures F5 (Analysis 2) and F7 (Analysis 4)
+- LaTeX evidence-ledger table
+- The detailed results report (Experiment_Report.md, via report.py)
+
+Analyses 3 (expertise) and 3b (development) are withdrawn: no verified source
+provides data for them (see `data/published_data.py`, EXPERIMENT_SOURCES).
 
 Usage:
-    python -m experiments.ectel.run_all                    # full run
-    python -m experiments.ectel.run_all --exclude Temnikova2010  # exclude a source
-    python -m experiments.ectel.run_all --exclude Temnikova2010 --tag no_temnikova
+    python -m experiments.retroactive_validation.run_all
+    python -m experiments.retroactive_validation.run_all --exclude Koponen2019 --tag no_koponen2019
 """
 
 from __future__ import annotations
@@ -24,264 +26,143 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.ectel.data.published_data import (
-    EXP1_SOURCES, EXP2_SOURCES, EXP3_SOURCES, EXP3B_SOURCES, EXP4_SOURCES,
-)
-from experiments.ectel import exp1_difficulty_ordering as exp1
-from experiments.ectel import exp2_fluency_paradox as exp2
-from experiments.ectel import exp3_experience_interaction as exp3
-from experiments.ectel import exp3b_developmental as exp3b
-from experiments.ectel import exp4_overediting as exp4
-from experiments.ectel import exp5_convergence as exp5
-from experiments.ectel import visualizations as viz
+from experiments.retroactive_validation.data import published_data as pd
+from experiments.retroactive_validation import exp1_difficulty_ordering as exp1
+from experiments.retroactive_validation import exp2_fluency_paradox as exp2
+from experiments.retroactive_validation import exp4_overediting as exp4
+from experiments.retroactive_validation import evidence_ledger as ledger
+from experiments.retroactive_validation import visualizations as viz
+from experiments.retroactive_validation import report
 
 
-BASE_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "ectel"
+BASE_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "retroactive_validation"
+
+WITHDRAWN = {
+    "Analysis 3": "Expertise: no inferential source survives verification.",
+    "Analysis 3b": "Development: Koponen (2015) contains no per-type or per-session data.",
+}
 
 
-def filter_sources(sources: list, exclude: list[str]) -> list:
-    """Remove sources whose 'source' field matches any name in exclude."""
-    if not exclude:
-        return sources
-    return [s for s in sources if s["source"] not in exclude]
+def all_sources() -> dict:
+    """Every verified source record in the data module, keyed by source name."""
+    return {v["source"]: v for v in vars(pd).values()
+            if isinstance(v, dict) and "source" in v and "verified" in v}
 
 
-def generate_latex_convergence(exp5_results: dict, output_dir: Path) -> Path:
-    """Generate LaTeX table for the convergence heatmap."""
-    table = exp5_results["table"]
-    agg = exp5_results["aggregate"]
+def sources_for(analysis_key: str, exclude: list[str]) -> list[dict]:
+    """Verified records named for an analysis in EXPERIMENT_SOURCES."""
+    records = all_sources()
+    names = [entry.split(" (")[0] for entry in pd.EXPERIMENT_SOURCES[analysis_key]]
+    return [records[n] for n in names if n in records and n not in exclude]
 
+
+DIRECTION_MARK = {"support": "+", "mixed": r"$\pm$", "against": r"$-$", "uninformative": r"$\cdot$"}
+
+
+def generate_latex_ledger(summary: dict, output_dir: Path) -> Path:
+    """LaTeX table: one row per finding."""
     lines = [
         r"\begin{table}[htbp]",
         r"\centering",
-        r"\caption{Convergence table: ToM framework predictions vs.\ published findings. "
-        r"\checkmark{} = aligns, $\sim$ = partially aligns, \texttimes{} = contradicts, "
-        r"--- = no data.}",
-        r"\label{tab:convergence}",
-        r"\begin{tabular}{llcccc}",
+        r"\caption{Evidence ledger. Direction relative to each analysis's prediction: "
+        r"+ supports, $\pm$ mixed, $-$ contradicts, $\cdot$ uninformative.}",
+        r"\label{tab:ledger}",
+        r"\begin{tabular}{llcl}",
         r"\toprule",
-        r"Skill & ToM & Exp~1 & Exp~2 & Exp~3 & Exp~4 \\",
-        r"      &     & Difficulty & Fluency & Expert-- & Over- \\",
-        r"      &     & ordering & paradox & novice & editing \\",
+        r"Analysis & Source & Dir. & Basis \\",
         r"\midrule",
     ]
-
-    from .tom_mapping import SKILL_ORDER, SKILL_TO_TOM_RANK
-
-    for skill in SKILL_ORDER:
-        row = table[skill]
-        tom = SKILL_TO_TOM_RANK[skill]
-        cells = []
-        for key in ["exp1_cells", "exp2_cells", "exp3_cells", "exp4_cells"]:
-            verdicts = row[key]
-            parts = []
-            for c in verdicts:
-                v = c["verdict"]
-                s = c["src"]
-                if v == "V":
-                    parts.append(rf"{s}\checkmark{{}}")
-                elif v == "~":
-                    parts.append(rf"{s}$\sim$")
-                elif v == "X":
-                    parts.append(rf"{s}\texttimes{{}}")
-            cell = " ".join(parts) if parts else "---"
-            cells.append(cell)
-
-        lines.append(
-            rf"{skill} & {tom} & {cells[0]} & {cells[1]} & {cells[2]} & {cells[3]} \\"
-        )
-
-    lines.extend([
-        r"\midrule",
-        rf"\multicolumn{{6}}{{l}}{{Convergence ratio: "
-        rf"{agg['convergence_ratio']:.0%} "
-        rf"({agg['n_align']}\checkmark{{}} / "
-        rf"{agg['n_align'] + agg['n_contradict']} cells, "
-        rf"$p = {agg['binomial_p']:.4f}$)}} \\",
-        r"\bottomrule",
-        r"\end{tabular}",
-        r"\end{table}",
-    ])
-
-    path = output_dir / "T_convergence.tex"
+    for f in summary["findings"]:
+        lines.append(rf"{f['analysis']} & {f['source']} & {DIRECTION_MARK[f['direction']]} "
+                     rf"& {f['basis']} \\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    path = output_dir / "T_evidence_ledger.tex"
     path.write_text("\n".join(lines), encoding="utf-8")
     return path
 
 
-def print_summary(all_results: dict):
-    """Print a concise console summary of all experiment results."""
+def print_summary(results: dict):
     sep = "=" * 70
-    dash = "-" * 70
-    print(f"\n{sep}")
-    tag = all_results["metadata"].get("tag", "full")
-    excluded = all_results["metadata"].get("excluded_sources", [])
-    title = f"EC-TEL 2026 RETROACTIVE VALIDATION -- RESULTS [{tag}]"
-    if excluded:
-        title += f"  (excluded: {', '.join(excluded)})"
-    print(title)
+    print(f"\n{sep}\nRETROACTIVE VALIDATION -- RESULTS [{results['metadata']['tag']}]\n{sep}")
+    for key in ["analysis1", "analysis2", "analysis4"]:
+        r = results[key]
+        print(f"\n  {r['experiment']}\n  Prediction: {r['prediction']}\n  >> {r['interpretation']}")
+    for name, why in WITHDRAWN.items():
+        print(f"\n  {name}: WITHDRAWN. {why}")
+    print(f"\n  Ledger: {results['ledger']['n_findings']} findings from "
+          f"{results['ledger']['n_distinct_sources']} sources")
+    for d, row in results["ledger"]["by_direction_and_basis"].items():
+        print(f"    {d:<14}" + "  ".join(f"{b}: {row[b]}" for b in ledger.BASES))
     print(sep)
-
-    for exp_key in ["exp1", "exp2", "exp3", "exp3b", "exp4", "exp5"]:
-        r = all_results[exp_key]
-        print(f"\n{dash}")
-        print(f"  {r['experiment']}")
-        print(dash)
-        if "prediction" in r:
-            print(f"  Prediction: {r['prediction']}")
-
-        agg = r.get("aggregate", {})
-        if "pooled_tau" in agg:
-            print(f"  Pooled tau: {agg['pooled_tau']:.4f} (p={agg['pooled_p']:.4f})")
-            print(f"  Weighted tau: {agg['weighted_tau']:.4f}")
-            print(f"  Sources positive: {agg['positive_count']}/{agg['n_sources']}")
-        elif "confirmed_count" in agg:
-            total = agg.get("n_sources", agg.get("n_sources_with_data", 0))
-            print(f"  Confirmed: {agg['confirmed_count']}/{total}")
-        if "convergence_ratio" in agg:
-            print(f"  Convergence ratio: {agg['convergence_ratio']:.0%}")
-            print(f"  Binomial p: {agg['binomial_p']:.4f}")
-
-        print(f"  >> {r['interpretation']}")
-
-    print(f"\n{'=' * 70}")
 
 
 def run(exclude: list[str] | None = None, tag: str = "full",
         output_dir: Path | None = None) -> dict:
-    """Run all experiments with optional source exclusion.
+    """Run all analyses with optional source exclusion.
 
     Args:
-        exclude: List of source names to exclude (e.g. ["Temnikova2010"]).
-        tag: Label for this run variant (used in filenames and metadata).
-        output_dir: Override output directory. Defaults to outputs/ectel/<tag>/.
+        exclude: Source names to exclude (e.g. ["Koponen2019"]).
+        tag: Label for this run variant (used in metadata and output path).
+        output_dir: Override output directory. Defaults to
+            outputs/retroactive_validation/ (full) or .../<tag>/.
     """
     exclude = exclude or []
-
     if output_dir is None:
         output_dir = BASE_OUTPUT_DIR / tag if tag != "full" else BASE_OUTPUT_DIR
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Filter sources
-    exp1_sources = filter_sources(EXP1_SOURCES, exclude)
-    exp2_sources = filter_sources(EXP2_SOURCES, exclude)
-    exp3_sources = filter_sources(EXP3_SOURCES, exclude)
-    exp3b_sources = filter_sources(EXP3B_SOURCES, exclude)
-    exp4_sources = filter_sources(EXP4_SOURCES, exclude)
+    a2_sources = sources_for("analysis_2_fluency", exclude)
+    a4_sources = sources_for("analysis_4_overediting", exclude)
 
-    excluded_label = f" (excluding {', '.join(exclude)})" if exclude else ""
-    print(f"Running EC-TEL 2026 retroactive validation experiments{excluded_label}...\n")
+    print("[1/4] Analysis 1: difficulty ordering (qualitative only)...")
+    a1 = exp1.run_all()
+    if exclude:
+        a1["findings"] = [f for f in a1["findings"] if f["source"] not in exclude]
+    print(f"[2/4] Analysis 2: fluency paradox ({len(a2_sources)} sources)...")
+    a2 = exp2.run_all(a2_sources)
+    print(f"[3/4] Analysis 4: over-editing ({len(a4_sources)} sources)...")
+    a4 = exp4.run_all(a4_sources)
+    print("[4/4] Evidence ledger...")
+    summary = ledger.summarise({"Analysis 1": a1, "Analysis 2": a2, "Analysis 4": a4})
 
-    # Experiment 1
-    src_count = len(exp1_sources)
-    print(f"[1/6] Experiment 1: ToM Ordering vs Difficulty Rankings ({src_count} sources)...")
-    exp1_results = exp1.run_all(exp1_sources)
-
-    # Experiment 2
-    src_count = len(exp2_sources)
-    print(f"[2/6] Experiment 2: Fluency Paradox ({src_count} sources)...")
-    exp2_results = exp2.run_all(exp2_sources)
-
-    # Experiment 3
-    src_count = len(exp3_sources)
-    print(f"[3/6] Experiment 3: Experience x ToM Interaction ({src_count} sources)...")
-    exp3_results = exp3.run_all(exp3_sources)
-
-    # Experiment 3b
-    src_count = len(exp3b_sources)
-    print(f"[4/6] Experiment 3b: Developmental ToM Gradient ({src_count} sources)...")
-    exp3b_results = exp3b.run_all(exp3b_sources)
-
-    # Experiment 4
-    src_count = len(exp4_sources)
-    print(f"[5/6] Experiment 4: Over-Editing as Misdirected ToM ({src_count} sources)...")
-    exp4_results = exp4.run_all(exp4_sources)
-
-    # Experiment 5
-    print("[6/6] Experiment 5: Integrative Convergence...")
-    exp5_results = exp5.run_all(exp1_results, exp2_results, exp3_results, exp4_results)
-
-    all_results = {
+    results = {
         "metadata": {
             "timestamp": datetime.now().isoformat(),
-            "spec_version": "ECTEL2026_v1",
+            "data_version": "published_data.py verified 2026-10",
             "tag": tag,
             "excluded_sources": exclude,
-            "description": "Retroactive validation of ToM framework against published PE data",
-            "source_counts": {
-                "exp1": len(exp1_sources),
-                "exp2": len(exp2_sources),
-                "exp3": len(exp3_sources),
-                "exp3b": len(exp3b_sources),
-                "exp4": len(exp4_sources),
-            },
+            "withdrawn_analyses": WITHDRAWN,
+            "source_counts": {"analysis2": len(a2_sources), "analysis4": len(a4_sources)},
         },
-        "exp1": exp1_results,
-        "exp2": exp2_results,
-        "exp3": exp3_results,
-        "exp3b": exp3b_results,
-        "exp4": exp4_results,
-        "exp5": exp5_results,
+        "analysis1": a1,
+        "analysis2": a2,
+        "analysis4": a4,
+        "ledger": summary,
     }
 
-    # Save JSON results
     results_path = output_dir / "all_results.json"
-    results_path.write_text(
-        json.dumps(all_results, indent=2, default=str), encoding="utf-8"
-    )
+    results_path.write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
     print(f"\nResults saved to {results_path}")
 
-    # Generate figures
-    print("\nGenerating figures...")
-    f4 = viz.figure_f4_difficulty_scatter(exp1_results, output_dir)
-    print(f"  F4: {f4}")
-    f4b = viz.figure_f4b_difficulty_combined(exp1_results, output_dir)
-    print(f"  F4b: {f4b}")
-    f5 = viz.figure_f5_fluency_asymmetry(exp2_results, output_dir)
-    print(f"  F5: {f5}")
-    f6 = viz.figure_f6_convergence_heatmap(exp5_results, output_dir)
-    print(f"  F6: {f6}")
-    f_exp3b = viz.figure_exp3b_learning_curves(exp3b_results, output_dir)
-    if f_exp3b:
-        print(f"  Exp3b: {f_exp3b}")
-    f_exp4 = viz.figure_exp4_overediting_bars(exp4_results, output_dir)
-    if f_exp4:
-        print(f"  Supp: {f_exp4}")
+    print("\nGenerating figures and tables...")
+    print(f"  F5: {viz.figure_f5_fluency(a2, output_dir)}")
+    print(f"  F7: {viz.figure_f7_overediting(a4, output_dir)}")
+    print(f"  {generate_latex_ledger(summary, output_dir)}")
+    print(f"  {report.write_report(results, output_dir)}")
 
-    # Generate LaTeX
-    print("\nGenerating LaTeX tables...")
-    tex = generate_latex_convergence(exp5_results, output_dir)
-    print(f"  {tex}")
-
-    # Console summary
-    print_summary(all_results)
-
-    return all_results
+    print_summary(results)
+    return results
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="EC-TEL 2026 retroactive validation experiments"
-    )
-    parser.add_argument(
-        "--exclude", nargs="+", default=[],
-        help="Source names to exclude (e.g. Temnikova2010)",
-    )
-    parser.add_argument(
-        "--tag", default=None,
-        help="Label for this run variant (default: auto-generated from exclusions)",
-    )
+    parser = argparse.ArgumentParser(description="Retroactive validation experiments")
+    parser.add_argument("--exclude", nargs="+", default=[],
+                        help="Source names to exclude (e.g. Koponen2019)")
+    parser.add_argument("--tag", default=None,
+                        help="Label for this run variant (default: no_<sources> or full)")
     args = parser.parse_args()
-
-    # Auto-generate tag from exclusions if not provided
     if args.tag is None:
-        if args.exclude:
-            args.tag = "no_" + "_".join(
-                name.lower().replace("2010", "").replace("2017", "").replace("2018", "").replace("2019", "").replace("2020", "").replace("2021", "").replace("2013", "").replace("2016", "")
-                for name in args.exclude
-            )
-        else:
-            args.tag = "full"
-
+        args.tag = ("no_" + "_".join(n.lower() for n in args.exclude)) if args.exclude else "full"
     run(exclude=args.exclude, tag=args.tag)
 
 
