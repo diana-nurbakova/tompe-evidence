@@ -1,0 +1,1322 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-01T17:49:39.315787",
+    "data_version": "published_data.py verified 2026-10",
+    "tag": "full",
+    "excluded_sources": [],
+    "withdrawn_analyses": {
+      "Analysis 3": "Expertise: no inferential source survives verification.",
+      "Analysis 3b": "Development: Koponen (2015) contains no per-type or per-session data."
+    },
+    "source_counts": {
+      "analysis2": 5,
+      "analysis4": 3
+    }
+  },
+  "analysis1": {
+    "experiment": "Analysis1_DifficultyOrdering",
+    "prediction": "Higher-ToM error types are harder to detect",
+    "status": "qualitative only",
+    "findings": [
+      {
+        "analysis": "Analysis 1",
+        "source": "Daems2017",
+        "claim": "Qualitative: grammatical errors predict technical and product effort; coherence and meaning shifts predict cognitive effort (fixations, duration). A dissociation along the hierarchy.",
+        "direction": "support",
+        "basis": "qualitative",
+        "source_location": "Daems et al. (2017), regression models by error type",
+        "detail": {
+          "caveat": "No per-error-type difficulty ranking exists in the source. Fixation duration was not significantly predicted by MT quality at all; the authors suggest it may be a poor effort measure. tau=1.000 in Analyses 1 and 3 was arithmetic, not a finding."
+        }
+      },
+      {
+        "analysis": "Analysis 1",
+        "source": "Popovic2018",
+        "claim": "NMT is worse than PBMT on ambiguous source words (S3) in every direction while better on verb forms and order (S2).",
+        "direction": "support",
+        "basis": "qualitative",
+        "source_location": "Table 2",
+        "detail": {
+          "nmt_better": [
+            "verb forms",
+            "verb omissions",
+            "verb order (DE-EN)",
+            "English noun collocations and German compounds",
+            "negation"
+          ],
+          "nmt_worse": [
+            "mistranslated prepositions (all directions)",
+            "ambiguous source words (all directions)",
+            "English continuous and perfect tenses"
+          ],
+          "caveat": "Ambiguous-word translation is a word-sense problem (S3) and NMT is worse at it in every direction, while improving on morphology and order (S2). The asymmetry is in the predicted direction, but the source reports no MQM-category rates, so no value is encoded."
+        }
+      }
+    ],
+    "interpretation": "NOT TESTED QUANTITATIVELY: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering."
+  },
+  "analysis2": {
+    "experiment": "Analysis2_FluencyParadox",
+    "prediction": "NMT reduces low-ToM errors more than high-ToM errors, and post-editors catch fewer of the errors that remain",
+    "status": "run",
+    "findings": [
+      {
+        "analysis": "Analysis 2",
+        "source": "Yamada2019",
+        "claim": "Students corrected 77.7% of major errors in SMT output but 68% in NMT output.",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Table 3",
+        "detail": {
+          "SMT_PE": {
+            "correction_rate": 0.777,
+            "range": [
+              0.41,
+              0.93
+            ],
+            "uncorrected_mean": 6.9
+          },
+          "NMT_PE": {
+            "correction_rate": 0.68,
+            "range": [
+              0.4,
+              0.9
+            ],
+            "uncorrected_mean": 3.2
+          },
+          "raw_output_quality": "Raw SMT contains 1.5x more errors than raw NMT; 72% of SMT errors are major against 37% for NMT. Students corrected a smaller proportion of a smaller and less severe error set.",
+          "caveat": "Aggregate only; no per-type correction rates."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Bentivogli2018",
+        "claim": "NMT reduced word-order and morphology errors (S2) more than lexical errors (S3), in both language pairs.",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Section 5 and Conclusions",
+        "detail": {
+          "per_pair": {
+            "EnDe": {
+              "categories": [
+                {
+                  "category": "Word order",
+                  "skill": "S2",
+                  "change": -0.409
+                },
+                {
+                  "category": "Morphology",
+                  "skill": "S2",
+                  "change": -0.317
+                },
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.16899999999999998
+                }
+              ],
+              "low_tom_mean_change": -0.363,
+              "comparisons": [
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.16899999999999998,
+                  "consistent": true
+                }
+              ],
+              "n_consistent": 1,
+              "n_comparisons": 1,
+              "direction": "support"
+            },
+            "EnFr": {
+              "categories": [
+                {
+                  "category": "Word order",
+                  "skill": "S2",
+                  "change": -0.484
+                },
+                {
+                  "category": "Morphology",
+                  "skill": "S2",
+                  "change": -0.414
+                },
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.271
+                }
+              ],
+              "low_tom_mean_change": -0.449,
+              "comparisons": [
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.271,
+                  "consistent": true
+                }
+              ],
+              "n_consistent": 1,
+              "n_comparisons": 1,
+              "direction": "support"
+            }
+          },
+          "caveat": "The source uses three coarse classes only (lexical, morphology, word order) and folds missing and extra words into 'lexical'. There is no omission/addition category, so no S4 value can be taken from it."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Bentivogli2018",
+        "claim": "Lexical errors' share of residual errors rises from PBMT to NMT (EnDe 72.1% -> 76.9%, EnFr 74.5% -> 79.0%).",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Section 5",
+        "detail": {
+          "note": "As output improves, the residual error profile shifts toward meaning-level errors."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "VanBrussel2018",
+        "claim": "Error counts NMT vs PBMT: grammar (S2) fell 72%; 4/5 high-ToM categories fell less or rose (exception: addition).",
+        "direction": "mixed",
+        "basis": "numeric descriptive",
+        "source_location": "Tables 1, 3, 4, 7, 9",
+        "detail": {
+          "baseline": "PBMT",
+          "categories": [
+            {
+              "category": "fluency_grammar",
+              "skill": "S2",
+              "tom_rank": 2,
+              "baseline": 932,
+              "NMT": 260,
+              "change": -0.721
+            },
+            {
+              "category": "fluency_lexicon",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 235,
+              "NMT": 358,
+              "change": 0.5234
+            },
+            {
+              "category": "mistranslation",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 483,
+              "NMT": 330,
+              "change": -0.3168
+            },
+            {
+              "category": "semantically_unrelated",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 9,
+              "NMT": 44,
+              "change": 3.8889
+            },
+            {
+              "category": "omission",
+              "skill": "S4",
+              "tom_rank": 4,
+              "baseline": 115,
+              "NMT": 62,
+              "change": -0.4609
+            },
+            {
+              "category": "addition",
+              "skill": "S4",
+              "tom_rank": 4,
+              "baseline": 39,
+              "NMT": 2,
+              "change": -0.9487
+            }
+          ],
+          "low_tom_mean_change": -0.721,
+          "comparisons": [
+            {
+              "category": "fluency_lexicon",
+              "skill": "S3",
+              "change": 0.5234,
+              "consistent": true
+            },
+            {
+              "category": "mistranslation",
+              "skill": "S3",
+              "change": -0.3168,
+              "consistent": true
+            },
+            {
+              "category": "semantically_unrelated",
+              "skill": "S3",
+              "change": 3.8889,
+              "consistent": true
+            },
+            {
+              "category": "omission",
+              "skill": "S4",
+              "change": -0.4609,
+              "consistent": true
+            },
+            {
+              "category": "addition",
+              "skill": "S4",
+              "change": -0.9487,
+              "consistent": false
+            }
+          ],
+          "n_consistent": 4,
+          "n_comparisons": 5,
+          "direction": "mixed"
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "VanBrussel2018",
+        "claim": "Omissions with no trace in the target: RBMT 7%, PBMT 23%, NMT 69%. In NMT, fluency no longer signals that source content is missing.",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Table 6",
+        "detail": {
+          "RBMT": 0.07,
+          "PBMT": 0.23,
+          "NMT": 0.69,
+          "content_word_share": {
+            "RBMT": 0.0014,
+            "PBMT": 0.6996,
+            "NMT": 0.8548
+          },
+          "words_per_omission": {
+            "RBMT": 1.07,
+            "PBMT": 1.09,
+            "NMT": 1.5
+          },
+          "note": "The source states that in RBMT and PBMT output omissions are anticipated by fluency errors, whereas in NMT fluency is no indicator that source content transferred. This is a direct measurement of the mechanism ToM-PE posits: fluency removes the surface cue that would trigger the higher-order check."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Popovic2018",
+        "claim": "NMT better on verb forms, order, compounds; worse on prepositions and ambiguous source words in every direction.",
+        "direction": "support",
+        "basis": "qualitative",
+        "source_location": "Table 2",
+        "detail": {
+          "nmt_better": [
+            "verb forms",
+            "verb omissions",
+            "verb order (DE-EN)",
+            "English noun collocations and German compounds",
+            "negation"
+          ],
+          "nmt_worse": [
+            "mistranslated prepositions (all directions)",
+            "ambiguous source words (all directions)",
+            "English continuous and perfect tenses"
+          ],
+          "caveat": "Ambiguous-word translation is a word-sense problem (S3) and NMT is worse at it in every direction, while improving on morphology and order (S2). The asymmetry is in the predicted direction, but the source reports no MQM-category rates, so no value is encoded."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Koponen2019",
+        "claim": "Overlooked necessary corrections: NMT 2.2%, SMT 2.7%, RBMT 3.3% of unedited words. NMT has the fewest.",
+        "direction": "against",
+        "basis": "numeric descriptive",
+        "source_location": "Section 4.1, closing paragraph",
+        "detail": {
+          "NMT": {
+            "count": 49,
+            "pct_of_unedited": 2.2
+          },
+          "SMT": {
+            "count": 56,
+            "pct_of_unedited": 2.7
+          },
+          "RBMT": {
+            "count": 80,
+            "pct_of_unedited": 3.3
+          },
+          "note": "NMT has the FEWEST overlooked necessary corrections. At the only level the source reports, this runs counter to the fluency-paradox prediction. Report it; do not drop it."
+        }
+      }
+    ],
+    "secondary": {
+      "VanBrussel2018_vs_RBMT": {
+        "analysis": "Analysis 2",
+        "source": "VanBrussel2018",
+        "claim": "Error counts NMT vs RBMT: grammar (S2) fell 70%; 4/5 high-ToM categories fell less or rose (exception: addition).",
+        "direction": "mixed",
+        "basis": "numeric descriptive",
+        "source_location": "Tables 1, 3, 4, 7, 9",
+        "detail": {
+          "baseline": "RBMT",
+          "categories": [
+            {
+              "category": "fluency_grammar",
+              "skill": "S2",
+              "tom_rank": 2,
+              "baseline": 864,
+              "NMT": 260,
+              "change": -0.6991
+            },
+            {
+              "category": "fluency_lexicon",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 533,
+              "NMT": 358,
+              "change": -0.3283
+            },
+            {
+              "category": "mistranslation",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 972,
+              "NMT": 330,
+              "change": -0.6605
+            },
+            {
+              "category": "semantically_unrelated",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 0,
+              "NMT": 44,
+              "change": Infinity
+            },
+            {
+              "category": "omission",
+              "skill": "S4",
+              "tom_rank": 4,
+              "baseline": 43,
+              "NMT": 62,
+              "change": 0.4419
+            },
+            {
+              "category": "addition",
+              "skill": "S4",
+              "tom_rank": 4,
+              "baseline": 61,
+              "NMT": 2,
+              "change": -0.9672
+            }
+          ],
+          "low_tom_mean_change": -0.6991,
+          "comparisons": [
+            {
+              "category": "fluency_lexicon",
+              "skill": "S3",
+              "change": -0.3283,
+              "consistent": true
+            },
+            {
+              "category": "mistranslation",
+              "skill": "S3",
+              "change": -0.6605,
+              "consistent": true
+            },
+            {
+              "category": "semantically_unrelated",
+              "skill": "S3",
+              "change": Infinity,
+              "consistent": true
+            },
+            {
+              "category": "omission",
+              "skill": "S4",
+              "change": 0.4419,
+              "consistent": true
+            },
+            {
+              "category": "addition",
+              "skill": "S4",
+              "change": -0.9672,
+              "consistent": false
+            }
+          ],
+          "n_consistent": 4,
+          "n_comparisons": 5,
+          "direction": "mixed"
+        }
+      }
+    },
+    "interpretation": "5 supporting, 1 mixed and 1 contrary findings from 5 sources. No finding rests on an inferential test."
+  },
+  "analysis4": {
+    "experiment": "Analysis4_OverEditing",
+    "prediction": "Unnecessary edits concentrate on low-ToM types; negative tau between ToM rank and unnecessary-edit rate",
+    "status": "run",
+    "findings": [
+      {
+        "analysis": "Analysis 4",
+        "source": "KoponenSalmi2017",
+        "claim": "Unnecessary-edit rate falls with ToM rank (deleted=S2: tau=-0.598, p=0.166, deleted=S4: tau=-0.224, p=0.602); not significant under either mapping. Ranks span S2-S4 only.",
+        "direction": "support",
+        "basis": "numeric test",
+        "source_location": "Section 5, Discussion",
+        "detail": {
+          "measure": "proportion of edits of this type judged unnecessary",
+          "mappings": {
+            "S2": {
+              "deleted": "S2",
+              "n": 5,
+              "kendall_tau": -0.5976,
+              "p_value": 0.1655,
+              "per_type": [
+                {
+                  "edit_type": "Word-order changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.8
+                },
+                {
+                  "edit_type": "Deletions",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.7
+                },
+                {
+                  "edit_type": "Word substitutions",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.33
+                },
+                {
+                  "edit_type": "Word-form changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.3
+                },
+                {
+                  "edit_type": "Insertions",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.16
+                }
+              ]
+            },
+            "S4": {
+              "deleted": "S4",
+              "n": 5,
+              "kendall_tau": -0.2236,
+              "p_value": 0.6015,
+              "per_type": [
+                {
+                  "edit_type": "Word-order changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.8
+                },
+                {
+                  "edit_type": "Deletions",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.7
+                },
+                {
+                  "edit_type": "Word substitutions",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.33
+                },
+                {
+                  "edit_type": "Word-form changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.3
+                },
+                {
+                  "edit_type": "Insertions",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.16
+                }
+              ]
+            }
+          },
+          "significant_at_05": false
+        }
+      },
+      {
+        "analysis": "Analysis 4",
+        "source": "Koponen2019",
+        "claim": "Unnecessary-edit rate falls with ToM rank (deleted=S2: tau=-0.598, p=0.166, deleted=S4: tau=-0.224, p=0.602); not significant under either mapping. Ranks span S2-S4 only.",
+        "direction": "support",
+        "basis": "numeric test",
+        "source_location": "Table 5, NMT panel",
+        "detail": {
+          "measure": "proportion of edits of this type correct but unnecessary",
+          "mappings": {
+            "S2": {
+              "deleted": "S2",
+              "n": 5,
+              "kendall_tau": -0.5976,
+              "p_value": 0.1655,
+              "per_type": [
+                {
+                  "edit_type": "Order changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.59,
+                  "total": 123
+                },
+                {
+                  "edit_type": "Deleted",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.38,
+                  "total": 290
+                },
+                {
+                  "edit_type": "Word substituted",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.35,
+                  "total": 404
+                },
+                {
+                  "edit_type": "Form changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.32,
+                  "total": 493
+                },
+                {
+                  "edit_type": "Inserted",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.26,
+                  "total": 357
+                }
+              ]
+            },
+            "S4": {
+              "deleted": "S4",
+              "n": 5,
+              "kendall_tau": -0.2236,
+              "p_value": 0.6015,
+              "per_type": [
+                {
+                  "edit_type": "Order changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.59,
+                  "total": 123
+                },
+                {
+                  "edit_type": "Deleted",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.38,
+                  "total": 290
+                },
+                {
+                  "edit_type": "Word substituted",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.35,
+                  "total": 404
+                },
+                {
+                  "edit_type": "Form changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.32,
+                  "total": 493
+                },
+                {
+                  "edit_type": "Inserted",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.26,
+                  "total": 357
+                }
+              ]
+            }
+          },
+          "significant_at_05": false
+        }
+      },
+      {
+        "analysis": "Analysis 4",
+        "source": "DeAlmeida2013",
+        "claim": "Preferential changes were 15.59% (EN-PT-BR) to 24.56% (EN-FR) of recorded items; the most experienced translators made the most preferential changes.",
+        "direction": "mixed",
+        "basis": "numeric descriptive",
+        "source_location": "Sections 4.9.1 and 4.9.2 (pp. 191-195)",
+        "detail": {
+          "aggregate": {
+            "EN-FR": {
+              "essential": 60.12,
+              "preferential": 24.56,
+              "not_implemented_plus_introduced": 15.31
+            },
+            "EN-PT-BR": {
+              "essential": 63.97,
+              "preferential": 15.59,
+              "not_implemented_plus_introduced": 20.41
+            },
+            "essential_dominated_by_language_category": {
+              "EN-FR": 54.98,
+              "EN-PT-BR": 71.69
+            }
+          },
+          "note": "The preferential-change range (15.6% to 24.6%) supports the over-editing claim. The experience finding complicates it: over-editing is not purely a novice behaviour. State both."
+        }
+      },
+      {
+        "analysis": "Analysis 4",
+        "source": "Koponen2015",
+        "claim": "Qualitative only: students reported difficulty distinguishing PE quality levels and that they were likely correcting too much.",
+        "direction": "uninformative",
+        "basis": "qualitative",
+        "source_location": "Koponen (2015), thematic analysis of reflective essays",
+        "detail": {
+          "why_uninformative": "Over-editing is reported, but not by error type, so it does not bear on where over-editing concentrates."
+        }
+      }
+    ],
+    "not_counted": {
+      "NitzkeGros2020": "Aggregates (1 unnecessary change per 22.3 words; 45.16 preferential per 1008 words) look transcribed. The per-category shares 0.30/0.35/0.20/0.10/0.05 sum to exactly 1.00 and follow the fabrication signature. Do not use the shares.",
+      "MellingerShreve2016": "60% of exact TM matches changed; 74% of fuzzy matches corrected. Look transcribed; unread."
+    },
+    "mapping_sensitivity": {
+      "issue": "The edit type 'deleted' has two defensible ToM assignments. In both sources most deletions are optional subject pronouns, which is a target-language grammar matter (S2); but deletion removes content, which bears on completeness (S4).",
+      "effect_on_analysis_4": {
+        "deleted=S2": {
+          "tau": -0.598,
+          "p": 0.166
+        },
+        "deleted=S4": {
+          "tau": -0.224,
+          "p": 0.602
+        }
+      },
+      "note": "Identical for both sources, because the two studies produce the same ordering of edit types by unnecessary rate. Report both mappings; the result is directionally stable and neither is significant."
+    },
+    "interpretation": "2/2 sources with per-type rates show the predicted negative tau under both mappings; none is significant. Nitzke & Gros and Mellinger & Shreve are not counted until verified."
+  },
+  "ledger": {
+    "experiment": "EvidenceLedger",
+    "findings": [
+      {
+        "analysis": "Analysis 1",
+        "source": "Daems2017",
+        "claim": "Qualitative: grammatical errors predict technical and product effort; coherence and meaning shifts predict cognitive effort (fixations, duration). A dissociation along the hierarchy.",
+        "direction": "support",
+        "basis": "qualitative",
+        "source_location": "Daems et al. (2017), regression models by error type",
+        "detail": {
+          "caveat": "No per-error-type difficulty ranking exists in the source. Fixation duration was not significantly predicted by MT quality at all; the authors suggest it may be a poor effort measure. tau=1.000 in Analyses 1 and 3 was arithmetic, not a finding."
+        }
+      },
+      {
+        "analysis": "Analysis 1",
+        "source": "Popovic2018",
+        "claim": "NMT is worse than PBMT on ambiguous source words (S3) in every direction while better on verb forms and order (S2).",
+        "direction": "support",
+        "basis": "qualitative",
+        "source_location": "Table 2",
+        "detail": {
+          "nmt_better": [
+            "verb forms",
+            "verb omissions",
+            "verb order (DE-EN)",
+            "English noun collocations and German compounds",
+            "negation"
+          ],
+          "nmt_worse": [
+            "mistranslated prepositions (all directions)",
+            "ambiguous source words (all directions)",
+            "English continuous and perfect tenses"
+          ],
+          "caveat": "Ambiguous-word translation is a word-sense problem (S3) and NMT is worse at it in every direction, while improving on morphology and order (S2). The asymmetry is in the predicted direction, but the source reports no MQM-category rates, so no value is encoded."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Yamada2019",
+        "claim": "Students corrected 77.7% of major errors in SMT output but 68% in NMT output.",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Table 3",
+        "detail": {
+          "SMT_PE": {
+            "correction_rate": 0.777,
+            "range": [
+              0.41,
+              0.93
+            ],
+            "uncorrected_mean": 6.9
+          },
+          "NMT_PE": {
+            "correction_rate": 0.68,
+            "range": [
+              0.4,
+              0.9
+            ],
+            "uncorrected_mean": 3.2
+          },
+          "raw_output_quality": "Raw SMT contains 1.5x more errors than raw NMT; 72% of SMT errors are major against 37% for NMT. Students corrected a smaller proportion of a smaller and less severe error set.",
+          "caveat": "Aggregate only; no per-type correction rates."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Bentivogli2018",
+        "claim": "NMT reduced word-order and morphology errors (S2) more than lexical errors (S3), in both language pairs.",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Section 5 and Conclusions",
+        "detail": {
+          "per_pair": {
+            "EnDe": {
+              "categories": [
+                {
+                  "category": "Word order",
+                  "skill": "S2",
+                  "change": -0.409
+                },
+                {
+                  "category": "Morphology",
+                  "skill": "S2",
+                  "change": -0.317
+                },
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.16899999999999998
+                }
+              ],
+              "low_tom_mean_change": -0.363,
+              "comparisons": [
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.16899999999999998,
+                  "consistent": true
+                }
+              ],
+              "n_consistent": 1,
+              "n_comparisons": 1,
+              "direction": "support"
+            },
+            "EnFr": {
+              "categories": [
+                {
+                  "category": "Word order",
+                  "skill": "S2",
+                  "change": -0.484
+                },
+                {
+                  "category": "Morphology",
+                  "skill": "S2",
+                  "change": -0.414
+                },
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.271
+                }
+              ],
+              "low_tom_mean_change": -0.449,
+              "comparisons": [
+                {
+                  "category": "Lexical",
+                  "skill": "S3",
+                  "change": -0.271,
+                  "consistent": true
+                }
+              ],
+              "n_consistent": 1,
+              "n_comparisons": 1,
+              "direction": "support"
+            }
+          },
+          "caveat": "The source uses three coarse classes only (lexical, morphology, word order) and folds missing and extra words into 'lexical'. There is no omission/addition category, so no S4 value can be taken from it."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Bentivogli2018",
+        "claim": "Lexical errors' share of residual errors rises from PBMT to NMT (EnDe 72.1% -> 76.9%, EnFr 74.5% -> 79.0%).",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Section 5",
+        "detail": {
+          "note": "As output improves, the residual error profile shifts toward meaning-level errors."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "VanBrussel2018",
+        "claim": "Error counts NMT vs PBMT: grammar (S2) fell 72%; 4/5 high-ToM categories fell less or rose (exception: addition).",
+        "direction": "mixed",
+        "basis": "numeric descriptive",
+        "source_location": "Tables 1, 3, 4, 7, 9",
+        "detail": {
+          "baseline": "PBMT",
+          "categories": [
+            {
+              "category": "fluency_grammar",
+              "skill": "S2",
+              "tom_rank": 2,
+              "baseline": 932,
+              "NMT": 260,
+              "change": -0.721
+            },
+            {
+              "category": "fluency_lexicon",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 235,
+              "NMT": 358,
+              "change": 0.5234
+            },
+            {
+              "category": "mistranslation",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 483,
+              "NMT": 330,
+              "change": -0.3168
+            },
+            {
+              "category": "semantically_unrelated",
+              "skill": "S3",
+              "tom_rank": 3,
+              "baseline": 9,
+              "NMT": 44,
+              "change": 3.8889
+            },
+            {
+              "category": "omission",
+              "skill": "S4",
+              "tom_rank": 4,
+              "baseline": 115,
+              "NMT": 62,
+              "change": -0.4609
+            },
+            {
+              "category": "addition",
+              "skill": "S4",
+              "tom_rank": 4,
+              "baseline": 39,
+              "NMT": 2,
+              "change": -0.9487
+            }
+          ],
+          "low_tom_mean_change": -0.721,
+          "comparisons": [
+            {
+              "category": "fluency_lexicon",
+              "skill": "S3",
+              "change": 0.5234,
+              "consistent": true
+            },
+            {
+              "category": "mistranslation",
+              "skill": "S3",
+              "change": -0.3168,
+              "consistent": true
+            },
+            {
+              "category": "semantically_unrelated",
+              "skill": "S3",
+              "change": 3.8889,
+              "consistent": true
+            },
+            {
+              "category": "omission",
+              "skill": "S4",
+              "change": -0.4609,
+              "consistent": true
+            },
+            {
+              "category": "addition",
+              "skill": "S4",
+              "change": -0.9487,
+              "consistent": false
+            }
+          ],
+          "n_consistent": 4,
+          "n_comparisons": 5,
+          "direction": "mixed"
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "VanBrussel2018",
+        "claim": "Omissions with no trace in the target: RBMT 7%, PBMT 23%, NMT 69%. In NMT, fluency no longer signals that source content is missing.",
+        "direction": "support",
+        "basis": "numeric descriptive",
+        "source_location": "Table 6",
+        "detail": {
+          "RBMT": 0.07,
+          "PBMT": 0.23,
+          "NMT": 0.69,
+          "content_word_share": {
+            "RBMT": 0.0014,
+            "PBMT": 0.6996,
+            "NMT": 0.8548
+          },
+          "words_per_omission": {
+            "RBMT": 1.07,
+            "PBMT": 1.09,
+            "NMT": 1.5
+          },
+          "note": "The source states that in RBMT and PBMT output omissions are anticipated by fluency errors, whereas in NMT fluency is no indicator that source content transferred. This is a direct measurement of the mechanism ToM-PE posits: fluency removes the surface cue that would trigger the higher-order check."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Popovic2018",
+        "claim": "NMT better on verb forms, order, compounds; worse on prepositions and ambiguous source words in every direction.",
+        "direction": "support",
+        "basis": "qualitative",
+        "source_location": "Table 2",
+        "detail": {
+          "nmt_better": [
+            "verb forms",
+            "verb omissions",
+            "verb order (DE-EN)",
+            "English noun collocations and German compounds",
+            "negation"
+          ],
+          "nmt_worse": [
+            "mistranslated prepositions (all directions)",
+            "ambiguous source words (all directions)",
+            "English continuous and perfect tenses"
+          ],
+          "caveat": "Ambiguous-word translation is a word-sense problem (S3) and NMT is worse at it in every direction, while improving on morphology and order (S2). The asymmetry is in the predicted direction, but the source reports no MQM-category rates, so no value is encoded."
+        }
+      },
+      {
+        "analysis": "Analysis 2",
+        "source": "Koponen2019",
+        "claim": "Overlooked necessary corrections: NMT 2.2%, SMT 2.7%, RBMT 3.3% of unedited words. NMT has the fewest.",
+        "direction": "against",
+        "basis": "numeric descriptive",
+        "source_location": "Section 4.1, closing paragraph",
+        "detail": {
+          "NMT": {
+            "count": 49,
+            "pct_of_unedited": 2.2
+          },
+          "SMT": {
+            "count": 56,
+            "pct_of_unedited": 2.7
+          },
+          "RBMT": {
+            "count": 80,
+            "pct_of_unedited": 3.3
+          },
+          "note": "NMT has the FEWEST overlooked necessary corrections. At the only level the source reports, this runs counter to the fluency-paradox prediction. Report it; do not drop it."
+        }
+      },
+      {
+        "analysis": "Analysis 4",
+        "source": "KoponenSalmi2017",
+        "claim": "Unnecessary-edit rate falls with ToM rank (deleted=S2: tau=-0.598, p=0.166, deleted=S4: tau=-0.224, p=0.602); not significant under either mapping. Ranks span S2-S4 only.",
+        "direction": "support",
+        "basis": "numeric test",
+        "source_location": "Section 5, Discussion",
+        "detail": {
+          "measure": "proportion of edits of this type judged unnecessary",
+          "mappings": {
+            "S2": {
+              "deleted": "S2",
+              "n": 5,
+              "kendall_tau": -0.5976,
+              "p_value": 0.1655,
+              "per_type": [
+                {
+                  "edit_type": "Word-order changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.8
+                },
+                {
+                  "edit_type": "Deletions",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.7
+                },
+                {
+                  "edit_type": "Word substitutions",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.33
+                },
+                {
+                  "edit_type": "Word-form changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.3
+                },
+                {
+                  "edit_type": "Insertions",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.16
+                }
+              ]
+            },
+            "S4": {
+              "deleted": "S4",
+              "n": 5,
+              "kendall_tau": -0.2236,
+              "p_value": 0.6015,
+              "per_type": [
+                {
+                  "edit_type": "Word-order changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.8
+                },
+                {
+                  "edit_type": "Deletions",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.7
+                },
+                {
+                  "edit_type": "Word substitutions",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.33
+                },
+                {
+                  "edit_type": "Word-form changes",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.3
+                },
+                {
+                  "edit_type": "Insertions",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.16
+                }
+              ]
+            }
+          },
+          "significant_at_05": false
+        }
+      },
+      {
+        "analysis": "Analysis 4",
+        "source": "Koponen2019",
+        "claim": "Unnecessary-edit rate falls with ToM rank (deleted=S2: tau=-0.598, p=0.166, deleted=S4: tau=-0.224, p=0.602); not significant under either mapping. Ranks span S2-S4 only.",
+        "direction": "support",
+        "basis": "numeric test",
+        "source_location": "Table 5, NMT panel",
+        "detail": {
+          "measure": "proportion of edits of this type correct but unnecessary",
+          "mappings": {
+            "S2": {
+              "deleted": "S2",
+              "n": 5,
+              "kendall_tau": -0.5976,
+              "p_value": 0.1655,
+              "per_type": [
+                {
+                  "edit_type": "Order changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.59,
+                  "total": 123
+                },
+                {
+                  "edit_type": "Deleted",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.38,
+                  "total": 290
+                },
+                {
+                  "edit_type": "Word substituted",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.35,
+                  "total": 404
+                },
+                {
+                  "edit_type": "Form changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.32,
+                  "total": 493
+                },
+                {
+                  "edit_type": "Inserted",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.26,
+                  "total": 357
+                }
+              ]
+            },
+            "S4": {
+              "deleted": "S4",
+              "n": 5,
+              "kendall_tau": -0.2236,
+              "p_value": 0.6015,
+              "per_type": [
+                {
+                  "edit_type": "Order changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.59,
+                  "total": 123
+                },
+                {
+                  "edit_type": "Deleted",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.38,
+                  "total": 290
+                },
+                {
+                  "edit_type": "Word substituted",
+                  "skill": "S3",
+                  "tom_rank": 3,
+                  "unnecessary_rate": 0.35,
+                  "total": 404
+                },
+                {
+                  "edit_type": "Form changed",
+                  "skill": "S2",
+                  "tom_rank": 2,
+                  "unnecessary_rate": 0.32,
+                  "total": 493
+                },
+                {
+                  "edit_type": "Inserted",
+                  "skill": "S4",
+                  "tom_rank": 4,
+                  "unnecessary_rate": 0.26,
+                  "total": 357
+                }
+              ]
+            }
+          },
+          "significant_at_05": false
+        }
+      },
+      {
+        "analysis": "Analysis 4",
+        "source": "DeAlmeida2013",
+        "claim": "Preferential changes were 15.59% (EN-PT-BR) to 24.56% (EN-FR) of recorded items; the most experienced translators made the most preferential changes.",
+        "direction": "mixed",
+        "basis": "numeric descriptive",
+        "source_location": "Sections 4.9.1 and 4.9.2 (pp. 191-195)",
+        "detail": {
+          "aggregate": {
+            "EN-FR": {
+              "essential": 60.12,
+              "preferential": 24.56,
+              "not_implemented_plus_introduced": 15.31
+            },
+            "EN-PT-BR": {
+              "essential": 63.97,
+              "preferential": 15.59,
+              "not_implemented_plus_introduced": 20.41
+            },
+            "essential_dominated_by_language_category": {
+              "EN-FR": 54.98,
+              "EN-PT-BR": 71.69
+            }
+          },
+          "note": "The preferential-change range (15.6% to 24.6%) supports the over-editing claim. The experience finding complicates it: over-editing is not purely a novice behaviour. State both."
+        }
+      },
+      {
+        "analysis": "Analysis 4",
+        "source": "Koponen2015",
+        "claim": "Qualitative only: students reported difficulty distinguishing PE quality levels and that they were likely correcting too much.",
+        "direction": "uninformative",
+        "basis": "qualitative",
+        "source_location": "Koponen (2015), thematic analysis of reflective essays",
+        "detail": {
+          "why_uninformative": "Over-editing is reported, but not by error type, so it does not bear on where over-editing concentrates."
+        }
+      }
+    ],
+    "by_analysis": {
+      "Analysis 1": {
+        "status": "qualitative only",
+        "n_findings": 2,
+        "by_direction": {
+          "support": 2,
+          "mixed": 0,
+          "against": 0,
+          "uninformative": 0
+        },
+        "sources": [
+          "Daems2017",
+          "Popovic2018"
+        ]
+      },
+      "Analysis 2": {
+        "status": "run",
+        "n_findings": 7,
+        "by_direction": {
+          "support": 5,
+          "mixed": 1,
+          "against": 1,
+          "uninformative": 0
+        },
+        "sources": [
+          "Bentivogli2018",
+          "Koponen2019",
+          "Popovic2018",
+          "VanBrussel2018",
+          "Yamada2019"
+        ]
+      },
+      "Analysis 4": {
+        "status": "run",
+        "n_findings": 4,
+        "by_direction": {
+          "support": 2,
+          "mixed": 1,
+          "against": 0,
+          "uninformative": 1
+        },
+        "sources": [
+          "DeAlmeida2013",
+          "Koponen2015",
+          "Koponen2019",
+          "KoponenSalmi2017"
+        ]
+      }
+    },
+    "by_direction_and_basis": {
+      "support": {
+        "numeric test": 2,
+        "numeric descriptive": 4,
+        "qualitative": 3
+      },
+      "mixed": {
+        "numeric test": 0,
+        "numeric descriptive": 2,
+        "qualitative": 0
+      },
+      "against": {
+        "numeric test": 0,
+        "numeric descriptive": 1,
+        "qualitative": 0
+      },
+      "uninformative": {
+        "numeric test": 0,
+        "numeric descriptive": 0,
+        "qualitative": 1
+      }
+    },
+    "n_findings": 13,
+    "n_distinct_sources": 9,
+    "note": "Counts of findings, not of independent tests. A source can contribute more than one finding, and to more than one analysis."
+  }
+}
