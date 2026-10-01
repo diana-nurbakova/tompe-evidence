@@ -3,7 +3,7 @@
 **Output directory:** [outputs/tom_validation/](.)
 **Pipeline source:** [experiments/tom_validation/](../../experiments/tom_validation/)
 **Spec:** [specs/tom-validation-experiment-spec.md](../../specs/tom-validation-experiment-spec.md)
-**Run date (artifacts):** 2026-04-07
+**Run date (artifacts):** 2026-04-07; S5/S6 IoU variants added 2026-10-01
 
 ---
 
@@ -174,7 +174,7 @@ Two spans from *different* raters merge into the same cluster when `IoU ≥ τ`.
 | Lenient | 0.3 | Sensitivity S5 |
 | Strict | 0.7 | Sensitivity S6 |
 
-For the recorded run, `--skip-iou-variants` was active, so S5/S6 are reported as skipped (`metadata.skip_iou_variants = true`).
+The original 2026-04-07 run used `--skip-iou-variants`. S5/S6 were added on 2026-10-01 from a full run without that flag; every other result in that run was identical to the original, so only the S5/S6 entries and the sensitivity summary in [all_results.json](all_results.json) were replaced (`metadata.iou_variants_added`).
 
 **Result:** **45,936 aligned errors** at τ = 0.5 (`metadata.n_aligned_errors`).
 
@@ -393,14 +393,24 @@ H3 supported with mixed-model evidence. R environment: R 4.2.3, lme4 1.1.35.
 | **S2** | Binary ToM: L0–L1 vs. L2–L3 (Strategy C) | 45,936 | −0.126 | ✓ |
 | **S3** | Drop `severity == Neutral` | 44,556 | −0.134 | ✓ |
 | **S4** | Major-only | 6,502 | −0.078 | ✓ |
-| S5 | Lenient IoU = 0.3 | — | — | skipped (`--skip-iou-variants`) |
-| S6 | Strict IoU = 0.7 | — | — | skipped (`--skip-iou-variants`) |
+| **S5** | Lenient IoU = 0.3 | 43,451 | −0.119 | ✓ |
+| **S6** | Strict IoU = 0.7 | 48,469 | −0.146 | ✓ |
 | **S7** | Exclude Human references | 36,729 | −0.141 | ✓ |
 | **S8** | Per-system V1 (10 systems) | — | 9 / 10 sig. | ✓ |
 
 The S8 per-system breakdown is in [all_results.json](all_results.json) → `sensitivity.S8_per_system`. Only `eTranslation.737` fails (τ-b = −0.009, p = 0.24); the other nine systems all show significant negative trends, with the strongest effects on `Online-A.1574` (−0.219), `Online-B.1590` (−0.226), and `Tohoku-AIP-NTT.890` (−0.230).
 
-**Convergence summary (`sensitivity._summary`):** 6 / 6 testable variants significant — convergence **MET**.
+**IoU threshold (S5/S6).** Mean detection rate by level at each alignment threshold:
+
+| τ | n | L0 | L1 | L2 | L3 | τ-b |
+|---|----|----|----|----|----|-----|
+| 0.3 (S5) | 43,451 | 0.527 | 0.526 | 0.494 | 0.430 | −0.119 |
+| 0.5 (primary) | 45,936 | 0.513 | 0.499 | 0.462 | 0.411 | −0.141 |
+| 0.7 (S6) | 48,469 | 0.489 | 0.482 | 0.433 | 0.395 | −0.146 |
+
+The ordering L0 ≥ L1 > L2 > L3 holds at every threshold, but the effect size depends on τ: lenient matching weakens it (−0.119), because merging partially overlapping spans raises detection rates most for L2. Part of the primary effect therefore reflects raters disagreeing on span boundaries rather than on whether an error exists. The direction of the trend is robust to τ; its magnitude is not. At τ = 0.3, L0 and L1 are practically tied (0.527 vs. 0.526), consistent with the non-significant L0–L1 contrast in V2.
+
+**Convergence summary (`sensitivity._summary`):** 8 / 8 variants significant — convergence **MET**.
 
 ---
 
@@ -411,7 +421,7 @@ The S8 per-system breakdown is in [all_results.json](all_results.json) → `sens
 | [V1_detection_boxplot.png](V1_detection_boxplot.png) | Box plot of detection rate by ToM level with severity-coloured jitter and means annotated. |
 | [V2_category_heatmap.png](V2_category_heatmap.png) | Horizontal bars of per-MQM-subcategory mean detection rate, coloured by ToM level. |
 | [V3_rater_slopes.png](V3_rater_slopes.png) | Forest plot of per-rater ToM slopes from V4. |
-| [sensitivity_summary.png](sensitivity_summary.png) | τ-b for each testable sensitivity variant; green = significant, grey = n.s. |
+| [sensitivity_summary.png](sensitivity_summary.png) | τ-b for each sensitivity variant (S1–S8); green = significant, grey = n.s. |
 
 Generation code: [figures.py](../../experiments/tom_validation/figures.py).
 
@@ -432,11 +442,11 @@ Generation code: [figures.py](../../experiments/tom_validation/figures.py).
 ## 15. Reproducing the run
 
 ```powershell
-# Full pipeline, primary IoU only (matches what produced the JSON in this folder)
-python -m experiments.tom_validation.run_all --skip-iou-variants
-
-# Full pipeline including S5/S6
+# Full pipeline including S5/S6 (reproduces everything in this folder; ~8 min)
 python -m experiments.tom_validation.run_all
+
+# Faster run, primary IoU only (S5/S6 reported as skipped)
+python -m experiments.tom_validation.run_all --skip-iou-variants
 
 # Skip the R-based CLMM/GLMM (Python-only fallback)
 python -m experiments.tom_validation.run_all --skip-r
@@ -451,6 +461,6 @@ The R analyses require R ≥ 4.2 with packages `ordinal` and `lme4` installed. I
 - **H1 confirmed:** detection rate decreases monotonically with ToM level (V1 J = 3.80e8, τ-b = −0.141, p < 1e-6).
 - **H2 confirmed:** the ToM effect survives covariate adjustment and crossed random effects of `system` × `doc` (CLMM β = −0.326, 95 % CI [−0.346, −0.307]).
 - **H3 supported:** raters differ systematically in ToM sensitivity (GLMM random-slope LR χ²(2) = 202.5, p < 1e-6); slopes range from −0.21 to +0.02.
-- **Robustness:** V1 is significant in the primary analysis and in 6 / 6 testable sensitivity variants, including a per-system check where 9 / 10 MT systems show the predicted decreasing trend.
+- **Robustness:** V1 is significant in the primary analysis and in all 8 sensitivity variants, including a per-system check where 9 / 10 MT systems show the predicted decreasing trend. The direction is stable across IoU thresholds 0.3–0.7, but the effect size is not (τ-b −0.119 to −0.146), so claims should rest on the ordering rather than the magnitude.
 
 The hierarchy therefore predicts a behavioural difficulty ordering that is reproducible across category-mapping ambiguity, severity weighting, system identity, and modelling choice.

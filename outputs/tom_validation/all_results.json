@@ -7,7 +7,8 @@
     "n_raw_errors": 64557,
     "n_aligned_errors": 45936,
     "n_tom_errors": 45936,
-    "skip_iou_variants": true
+    "skip_iou_variants": false,
+    "iou_variants_added": "2026-10-01 (S5/S6 from a full run without --skip-iou-variants; all other entries unchanged)"
   },
   "descriptive": {
     "per_level": {
@@ -637,12 +638,62 @@
       "tau_b": -0.1405
     },
     "S5_iou_lenient": {
-      "skipped": true,
-      "reason": "No lenient IoU data"
+      "v1": {
+        "experiment": "V1_Jonckheere_Terpstra",
+        "hypothesis": "H1: Detection rate decreases monotonically with ToM level",
+        "J_statistic": 337443989.0,
+        "p_value": 0.0,
+        "significant": true,
+        "kendall_tau_b": -0.1188,
+        "kendall_p": 0.0,
+        "group_means": {
+          "L0": 0.5266454513310097,
+          "L1": 0.5255324608673339,
+          "L2": 0.4943555208536664,
+          "L3": 0.43023713858031987
+        },
+        "group_sizes": {
+          "L0": 13198,
+          "L1": 1299,
+          "L2": 20492,
+          "L3": 8462
+        },
+        "direction": "decreasing",
+        "interpretation": "CONFIRMED: Significant monotonic decrease (J=337443989.0, p=0.0000, tau_b=-0.1188)"
+      },
+      "n_errors": 43451,
+      "significant": true,
+      "tau_b": -0.1188,
+      "iou_threshold": 0.3
     },
     "S6_iou_strict": {
-      "skipped": true,
-      "reason": "No strict IoU data"
+      "v1": {
+        "experiment": "V1_Jonckheere_Terpstra",
+        "hypothesis": "H1: Detection rate decreases monotonically with ToM level",
+        "J_statistic": 421042391.5,
+        "p_value": 0.0,
+        "significant": true,
+        "kendall_tau_b": -0.1457,
+        "kendall_p": 0.0,
+        "group_means": {
+          "L0": 0.4894348894348894,
+          "L1": 0.4821132433072732,
+          "L2": 0.43349725607583206,
+          "L3": 0.3953915747808877
+        },
+        "group_sizes": {
+          "L0": 14245,
+          "L1": 1407,
+          "L2": 23385,
+          "L3": 9432
+        },
+        "direction": "decreasing",
+        "interpretation": "CONFIRMED: Significant monotonic decrease (J=421042391.5, p=0.0000, tau_b=-0.1457)"
+      },
+      "n_errors": 48469,
+      "significant": true,
+      "tau_b": -0.1457,
+      "iou_threshold": 0.7
     },
     "S8_per_system": {
       "per_system": {
@@ -712,8 +763,8 @@
       "significant": true
     },
     "_summary": {
-      "n_testable": 6,
-      "n_significant": 6,
+      "n_testable": 8,
+      "n_significant": 8,
       "convergence_met": true,
       "criterion": "V1 significant in primary + at least 5 of 8 sensitivity analyses"
     }
