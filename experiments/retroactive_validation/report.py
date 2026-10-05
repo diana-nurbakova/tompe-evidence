@@ -389,9 +389,8 @@ def _reproducibility(w: _Writer, results: Dict):
     w.table(["File", "Contents"], [
         ["`all_results.json`", "Structured results for every analysis and the ledger"],
         [f"`{REPORT_NAME}`", "This report"],
-        ["`F5_fluency_paradox.png`", "Analysis 2: relative error change by category; omission visibility"],
-        ["`F7_overediting.png`", "Analysis 4: unnecessary-edit rate by edit type, both mappings"],
-        ["`T_evidence_ledger.tex`", "LaTeX evidence-ledger table"],
+        ["`F5_fluency_paradox.pdf` (+ `.png`)", "Analysis 2: relative error change by category; omission visibility"],
+        ["`F7_overediting.pdf` (+ `.png`)", "Analysis 4: unnecessary-edit rate by edit type, both mappings"],
     ])
     w("```bash")
     w("python -m experiments.retroactive_validation.run_all            # full run, writes this report")

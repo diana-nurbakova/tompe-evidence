@@ -42,10 +42,16 @@ def figure_v1_detection_boxplot(
     """Figure V1: Box plot of detection rate by ToM level (§7.2).
 
     Shows distribution of detection rates per level, with jittered points
-    colored by severity.
+    colored by severity. Sized for one IEEE column (3.4 in) and written as
+    PDF and 300 dpi PNG; the title is left to the paper's caption.
     """
     _setup_style()
-    fig, ax = plt.subplots(figsize=(8, 5))
+    plt.rcParams.update({
+        "font.size": 7, "axes.titlesize": 8, "axes.labelsize": 7,
+        "xtick.labelsize": 6.5, "ytick.labelsize": 6.5, "legend.fontsize": 6.5,
+    })
+    fig, ax = plt.subplots(figsize=(3.4, 2.6), layout="constrained", facecolor="white")
+    rng = np.random.default_rng(0)
 
     df = tom_df.copy()
     df["tom_label"] = df["tom_level"].map(TOM_LABELS)
@@ -60,7 +66,7 @@ def figure_v1_detection_boxplot(
     sns.boxplot(
         data=df, x="tom_label", y="detection_rate",
         order=level_order, color="lightgray", width=0.5,
-        fliersize=0, ax=ax,
+        fliersize=0, linewidth=0.8, ax=ax,
     )
 
     # Jittered points colored by severity
@@ -68,24 +74,28 @@ def figure_v1_detection_boxplot(
         subset = df[df["severity"] == sev]
         if len(subset) == 0:
             continue
-        jitter = np.random.normal(0, 0.08, size=len(subset))
+        jitter = rng.normal(0, 0.08, size=len(subset))
         x_pos = [level_order.index(lab) + j for lab, j in zip(subset["tom_label"], jitter)]
         ax.scatter(
             x_pos, subset["detection_rate"],
-            c=color, alpha=0.15, s=8, label=sev, zorder=2,
+            c=color, alpha=0.15, s=3, linewidths=0, label=sev, zorder=2,
         )
 
     # Mean markers
     means = df.groupby("tom_label")["detection_rate"].mean()
     for i, label in enumerate(level_order):
         if label in means.index:
-            ax.plot(i, means[label], "D", color="black", markersize=7, zorder=3)
+            ax.plot(i, means[label], "D", color="black", markersize=4, zorder=3)
 
-    ax.set_xlabel("ToM Level")
-    ax.set_ylabel("Detection Rate")
-    ax.set_title("Error Detection Rate by ToM Level")
-    ax.set_ylim(-0.05, 1.15)
-    ax.legend(title="Severity", loc="upper right")
+    ax.set_xlabel("ToM level")
+    ax.set_ylabel("Detection rate")
+    ax.set_ylim(-0.05, 1.08)
+    handles, labels = ax.get_legend_handles_labels()
+    legend = fig.legend(handles, [f"{lab} severity" for lab in labels], loc="outside upper center",
+                        ncol=3, frameon=False, handletextpad=0.2, columnspacing=1.2,
+                        markerscale=2)
+    for handle in legend.legend_handles:
+        handle.set_alpha(1)
 
     # Add mean annotation
     for i, label in enumerate(level_order):
@@ -93,14 +103,14 @@ def figure_v1_detection_boxplot(
             ax.annotate(
                 f"M={means[label]:.3f}",
                 (i, means[label] + 0.06),
-                ha="center", fontsize=9,
+                ha="center", fontsize=6.5,
             )
 
-    plt.tight_layout()
     path = output_dir / "V1_detection_boxplot.png"
-    fig.savefig(path, dpi=300, bbox_inches="tight")
+    fig.savefig(path.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.02, facecolor="white")
+    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.02, facecolor="white")
     plt.close(fig)
-    return path
+    return path.with_suffix(".pdf")
 
 
 def figure_v2_category_heatmap(

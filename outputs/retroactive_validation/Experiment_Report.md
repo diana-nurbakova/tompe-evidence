@@ -2,8 +2,8 @@
 
 Detailed results report. Generated from `all_results.json` and `data/published_data.py`; do not edit by hand.
 
-- **Generated:** 2026-10-01 17:50
-- **Run timestamp:** 2026-10-01T17:49:39.315787
+- **Generated:** 2026-10-05 20:32
+- **Run timestamp:** 2026-10-05T20:32:39.393665
 - **Data version:** published_data.py verified 2026-10
 - **Tag:** `full`
 - **Excluded sources:** none
@@ -260,9 +260,8 @@ Sources contributing to more than one analysis: Koponen2019, Popovic2018.
 |---|---|
 | `all_results.json` | Structured results for every analysis and the ledger |
 | `Experiment_Report.md` | This report |
-| `F5_fluency_paradox.png` | Analysis 2: relative error change by category; omission visibility |
-| `F7_overediting.png` | Analysis 4: unnecessary-edit rate by edit type, both mappings |
-| `T_evidence_ledger.tex` | LaTeX evidence-ledger table |
+| `F5_fluency_paradox.pdf` (+ `.png`) | Analysis 2: relative error change by category; omission visibility |
+| `F7_overediting.pdf` (+ `.png`) | Analysis 4: unnecessary-edit rate by edit type, both mappings |
 
 ```bash
 python -m experiments.retroactive_validation.run_all            # full run, writes this report

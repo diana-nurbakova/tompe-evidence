@@ -3,7 +3,6 @@
 Runs the analyses that the verified source data support and produces:
 - JSON results (per-analysis + evidence ledger)
 - Figures F5 (Analysis 2) and F7 (Analysis 4)
-- LaTeX evidence-ledger table
 - The detailed results report (Experiment_Report.md, via report.py)
 
 Analyses 3 (expertise) and 3b (development) are withdrawn: no verified source
@@ -54,31 +53,6 @@ def sources_for(analysis_key: str, exclude: list[str]) -> list[dict]:
     records = all_sources()
     names = [entry.split(" (")[0] for entry in pd.EXPERIMENT_SOURCES[analysis_key]]
     return [records[n] for n in names if n in records and n not in exclude]
-
-
-DIRECTION_MARK = {"support": "+", "mixed": r"$\pm$", "against": r"$-$", "uninformative": r"$\cdot$"}
-
-
-def generate_latex_ledger(summary: dict, output_dir: Path) -> Path:
-    """LaTeX table: one row per finding."""
-    lines = [
-        r"\begin{table}[htbp]",
-        r"\centering",
-        r"\caption{Evidence ledger. Direction relative to each analysis's prediction: "
-        r"+ supports, $\pm$ mixed, $-$ contradicts, $\cdot$ uninformative.}",
-        r"\label{tab:ledger}",
-        r"\begin{tabular}{llcl}",
-        r"\toprule",
-        r"Analysis & Source & Dir. & Basis \\",
-        r"\midrule",
-    ]
-    for f in summary["findings"]:
-        lines.append(rf"{f['analysis']} & {f['source']} & {DIRECTION_MARK[f['direction']]} "
-                     rf"& {f['basis']} \\")
-    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
-    path = output_dir / "T_evidence_ledger.tex"
-    path.write_text("\n".join(lines), encoding="utf-8")
-    return path
 
 
 def print_summary(results: dict):
@@ -144,10 +118,9 @@ def run(exclude: list[str] | None = None, tag: str = "full",
     results_path.write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
     print(f"\nResults saved to {results_path}")
 
-    print("\nGenerating figures and tables...")
+    print("\nGenerating figures and report...")
     print(f"  F5: {viz.figure_f5_fluency(a2, output_dir)}")
     print(f"  F7: {viz.figure_f7_overediting(a4, output_dir)}")
-    print(f"  {generate_latex_ledger(summary, output_dir)}")
     print(f"  {report.write_report(results, output_dir)}")
 
     print_summary(results)

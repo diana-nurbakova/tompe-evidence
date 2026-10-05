@@ -418,7 +418,7 @@ The ordering L0 ≥ L1 > L2 > L3 holds at every threshold, but the effect size d
 
 | File | What it shows |
 |------|---------------|
-| [V1_detection_boxplot.png](V1_detection_boxplot.png) | Box plot of detection rate by ToM level with severity-coloured jitter and means annotated. |
+| [V1_detection_boxplot.pdf](V1_detection_boxplot.pdf) ([.png](V1_detection_boxplot.png)) | Box plot of detection rate by ToM level with severity-coloured jitter and means annotated; single IEEE column width. |
 | [V2_category_heatmap.png](V2_category_heatmap.png) | Horizontal bars of per-MQM-subcategory mean detection rate, coloured by ToM level. |
 | [V3_rater_slopes.png](V3_rater_slopes.png) | Forest plot of per-rater ToM slopes from V4. |
 | [sensitivity_summary.png](sensitivity_summary.png) | τ-b for each sensitivity variant (S1–S8); green = significant, grey = n.s. |

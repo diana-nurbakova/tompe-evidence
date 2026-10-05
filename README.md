@@ -60,7 +60,10 @@ Current status of the epxeriments can be found in
 **Superseded results.** Earlier versions of this repository (up to commit `705b8ed`)
 reported a convergence ratio of 93.2–93.6 %, a pooled Analysis 1 p = 0.044, and
 Analyses 3 and 3b. These rested on values the sources do not contain and should not
-be cited. They remain in the history for audit.
+be cited. They remain in the history for audit. The convergence heatmap
+(`F6_convergence_heatmap.png`, also circulated as `Fig4_Convergence.pdf`) showed the
+withdrawn ratio, a "Partial" verdict and an expertise column for the withdrawn
+Analysis 3; it was deleted in commit `30e68d0` rather than regenerated.
 
 ---
 
@@ -103,7 +106,7 @@ experiments/
   retroactive_validation/  Retroactive validation; data/published_data.py holds the verified values
 outputs/
   tom_validation/          Results, figures, EXPERIMENTS.md
-  retroactive_validation/  Results, figures, LaTeX ledger table, Experiment_Report.md
+  retroactive_validation/  Results, figures, Experiment_Report.md
 scripts/
   fetch_wmt_mqm.py         Download and verify the WMT 2020 MQM data
   generate_retroactive_report.py
