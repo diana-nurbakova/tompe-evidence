@@ -2,7 +2,7 @@
 
 Runs the analyses that the verified source data support and produces:
 - JSON results (per-analysis + evidence ledger)
-- Figures F5 (Analysis 2) and F7 (Analysis 4)
+- Figures F5 (Analysis 2; full-width and single-column stacked) and F7 (Analysis 4)
 - The detailed results report (Experiment_Report.md, via report.py)
 
 Analyses 3 (expertise) and 3b (development) are withdrawn: no verified source
@@ -120,6 +120,7 @@ def run(exclude: list[str] | None = None, tag: str = "full",
 
     print("\nGenerating figures and report...")
     print(f"  F5: {viz.figure_f5_fluency(a2, output_dir)}")
+    print(f"  F5 (stacked): {viz.figure_f5_fluency_stacked(a2, output_dir)}")
     print(f"  F7: {viz.figure_f7_overediting(a4, output_dir)}")
     print(f"  {report.write_report(results, output_dir)}")
 

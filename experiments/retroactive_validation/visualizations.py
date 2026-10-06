@@ -1,6 +1,7 @@
 """Figures for the retroactive validation analyses.
 
-F5  Analysis 2: NMT error change by ToM level, and omission visibility.
+F5  Analysis 2: NMT error change by ToM level, and omission visibility
+    (full-width, plus a single-column stacked variant).
 F7  Analysis 4: unnecessary-edit rate by ToM rank, both 'deleted' mappings.
 
 Only verified numeric values are plotted. Qualitative findings appear in the
@@ -77,8 +78,8 @@ def _save(fig, path: Path) -> Path:
     return path.with_suffix(".pdf")
 
 
-def figure_f5_fluency(exp2: Dict, output_dir: Path) -> Path:
-    """Analysis 2: relative NMT error change per category, plus omission visibility."""
+def _f5_data(exp2: Dict):
+    """Rows for the error-change panel and the omission-visibility finding."""
     bent = next(f for f in exp2["findings"]
                 if f["source"] == "Bentivogli2018" and "per_pair" in f["detail"])
     vb = next(f for f in exp2["findings"]
@@ -95,61 +96,96 @@ def figure_f5_fluency(exp2: Dict, output_dir: Path) -> Path:
     rows.append((DISPLAY_NAME[vb["source"]], None, None))
     for c in vb["detail"]["categories"]:
         rows.append((c["category"].replace("_", " "), c["change"], c["skill"]))
+    return rows, vis
 
+
+def _f5_change_panel(ax, rows, title: str, xlabel: str, value_size: float,
+                     x_min: float = -1.35, xticks=None):
+    # Clip the one extreme value (semantically unrelated, +389%): the bar stops at
+    # `clip` with a break mark across it, and its true value is labelled inside the axes.
+    clip = 1.2
+    ys = range(len(rows))[::-1]
+    for y, (label, change, skill) in zip(ys, rows):
+        if change is None:
+            continue
+        shown = max(min(change, clip), -1)
+        ax.barh(y, shown, height=0.62, color=SLOT[SKILL_SLOT[skill]])
+        if change > clip:
+            for dx in (-0.10, -0.06):
+                ax.plot([clip + dx - 0.02, clip + dx + 0.02], [y - 0.42, y + 0.42],
+                        color=SURFACE, linewidth=1.6, solid_capstyle="butt")
+        ax.text(shown + (0.03 if shown >= 0 else -0.03), y, f"{change:+.0%}", va="center",
+                ha="left" if shown >= 0 else "right", fontsize=value_size, color=INK_2)
+    ax.set_yticks(list(ys))
+    ax.set_yticklabels([r[0] for r in rows], color=INK)
+    for tick, (_, change, _) in zip(ax.get_yticklabels(), rows):
+        if change is None:
+            tick.set_fontweight("bold")
+    for tick, (_, change, _) in zip(ax.yaxis.get_major_ticks(), rows):
+        if change is None:
+            tick.tick1line.set_visible(False)
+    ax.axvline(0, color=INK_2, linewidth=0.8)
+    ax.set_xlim(x_min, clip + 0.4)
+    if xticks is not None:
+        ax.set_xticks(xticks)
+    ax.set_ylim(-0.6, len(rows) - 0.4)
+    ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0))
+    ax.set_xlabel(xlabel, color=INK_2)
+    ax.set_title(title, color=INK, loc="left")
+    _style(ax)
+
+
+def _f5_visibility_panel(ax, vis, title: str, xlabel: str, value_size: float):
+    systems = ["RBMT", "PBMT", "NMT"]
+    vals = [vis["detail"][s] for s in systems]
+    ax.bar(systems, vals, width=0.55, color=SLOT[2])
+    for x, v in enumerate(vals):
+        ax.text(x, v + 0.02, f"{v:.0%}", ha="center", fontsize=value_size, color=INK)
+    ax.set_ylim(0, 0.85)
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0))
+    ax.set_title(title, color=INK, loc="left")
+    ax.set_xlabel(xlabel, color=INK_2)
+    _style(ax)
+    ax.grid(axis="x", visible=False)
+    ax.grid(axis="y", color=GRID, linewidth=0.6)
+
+
+def figure_f5_fluency(exp2: Dict, output_dir: Path) -> Path:
+    """Analysis 2: relative NMT error change per category, plus omission visibility.
+
+    Full-width (figure*) layout, panels side by side.
+    """
+    rows, vis = _f5_data(exp2)
     with plt.rc_context(FONT_FULL_WIDTH):
         fig, (ax1, ax2) = plt.subplots(
             1, 2, figsize=(7.0, 3.2), gridspec_kw={"width_ratios": [2.6, 1]},
             layout="constrained", facecolor=SURFACE)
-
-        # Clip the one extreme value (semantically unrelated, +389%): the bar stops at
-        # `clip` with a break mark across it, and its true value is labelled inside the axes.
-        clip = 1.2
-        ys = range(len(rows))[::-1]
-        for y, (label, change, skill) in zip(ys, rows):
-            if change is None:
-                continue
-            shown = max(min(change, clip), -1)
-            ax1.barh(y, shown, height=0.62, color=SLOT[SKILL_SLOT[skill]])
-            if change > clip:
-                for dx in (-0.10, -0.06):
-                    ax1.plot([clip + dx - 0.02, clip + dx + 0.02], [y - 0.42, y + 0.42],
-                             color=SURFACE, linewidth=1.6, solid_capstyle="butt")
-            ax1.text(shown + (0.03 if shown >= 0 else -0.03), y, f"{change:+.0%}", va="center",
-                     ha="left" if shown >= 0 else "right", fontsize=7, color=INK_2)
-        ax1.set_yticks(list(ys))
-        ax1.set_yticklabels([r[0] for r in rows], color=INK)
-        for tick, (_, change, _) in zip(ax1.get_yticklabels(), rows):
-            if change is None:
-                tick.set_fontweight("bold")
-        for tick, (_, change, _) in zip(ax1.yaxis.get_major_ticks(), rows):
-            if change is None:
-                tick.tick1line.set_visible(False)
-        ax1.axvline(0, color=INK_2, linewidth=0.8)
-        ax1.set_xlim(-1.35, clip + 0.4)
-        ax1.set_ylim(-0.6, len(rows) - 0.4)
-        ax1.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0))
-        ax1.set_xlabel("Relative error change, NMT vs PBMT (negative = fewer errors)",
-                       color=INK_2)
-        ax1.set_title("NMT removes form errors more than meaning errors", color=INK, loc="left")
-        _style(ax1)
-
-        systems = ["RBMT", "PBMT", "NMT"]
-        vals = [vis["detail"][s] for s in systems]
-        ax2.bar(systems, vals, width=0.55, color=SLOT[2])
-        for x, v in enumerate(vals):
-            ax2.text(x, v + 0.02, f"{v:.0%}", ha="center", fontsize=7, color=INK)
-        ax2.set_ylim(0, 0.85)
-        ax2.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0))
-        ax2.set_title("Omissions with no trace\nin the target", color=INK, loc="left")
-        ax2.set_xlabel(f"{DISPLAY_NAME[vis['source']]},\nTable 6", color=INK_2)
-        _style(ax2)
-        ax2.grid(axis="x", visible=False)
-        ax2.grid(axis="y", color=GRID, linewidth=0.6)
-
+        _f5_change_panel(ax1, rows, "NMT removes form errors more than meaning errors",
+                         "Relative error change, NMT vs PBMT (negative = fewer errors)", 7)
+        _f5_visibility_panel(ax2, vis, "Omissions with no trace\nin the target",
+                             f"{DISPLAY_NAME[vis['source']]},\nTable 6", 7)
         handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in SLOT]
         fig.legend(handles, GROUP_LABEL, loc="outside lower center", ncol=3, frameon=False,
                    labelcolor=INK_2)
         return _save(fig, output_dir / "F5_fluency_paradox.png")
+
+
+def figure_f5_fluency_stacked(exp2: Dict, output_dir: Path) -> Path:
+    """F5 for a single column (3.4 in): the same two panels stacked vertically."""
+    rows, vis = _f5_data(exp2)
+    with plt.rc_context(FONT_COLUMN):
+        fig, (ax1, ax2) = plt.subplots(
+            2, 1, figsize=(3.4, 4.6), height_ratios=[2.6, 1],
+            layout="constrained", facecolor=SURFACE)
+        _f5_change_panel(ax1, rows, "NMT removes form errors more\nthan meaning errors",
+                         "Relative error change, NMT vs PBMT\n(negative = fewer errors)", 6.5,
+                         x_min=-1.55, xticks=[-1, 0, 1])
+        _f5_visibility_panel(ax2, vis, "Omissions with no trace in target",
+                             f"{DISPLAY_NAME[vis['source']]}, Table 6", 6.5)
+        handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in SLOT]
+        fig.legend(handles, GROUP_LABEL, loc="outside lower center", ncol=2, frameon=False,
+                   labelcolor=INK_2, columnspacing=1.0, handlelength=1.4)
+        return _save(fig, output_dir / "F5_fluency_paradox_stacked.png")
 
 
 def _tau_note(tested) -> str:

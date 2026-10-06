@@ -390,6 +390,7 @@ def _reproducibility(w: _Writer, results: Dict):
         ["`all_results.json`", "Structured results for every analysis and the ledger"],
         [f"`{REPORT_NAME}`", "This report"],
         ["`F5_fluency_paradox.pdf` (+ `.png`)", "Analysis 2: relative error change by category; omission visibility"],
+        ["`F5_fluency_paradox_stacked.pdf` (+ `.png`)", "Same as F5, panels stacked for single-column width"],
         ["`F7_overediting.pdf` (+ `.png`)", "Analysis 4: unnecessary-edit rate by edit type, both mappings"],
     ])
     w("```bash")

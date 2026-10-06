@@ -2,8 +2,8 @@
 
 Detailed results report. Generated from `all_results.json` and `data/published_data.py`; do not edit by hand.
 
-- **Generated:** 2026-10-05 20:32
-- **Run timestamp:** 2026-10-05T20:32:39.393665
+- **Generated:** 2026-10-05 21:56
+- **Run timestamp:** 2026-10-05T21:56:08.919075
 - **Data version:** published_data.py verified 2026-10
 - **Tag:** `full`
 - **Excluded sources:** none
@@ -261,6 +261,7 @@ Sources contributing to more than one analysis: Koponen2019, Popovic2018.
 | `all_results.json` | Structured results for every analysis and the ledger |
 | `Experiment_Report.md` | This report |
 | `F5_fluency_paradox.pdf` (+ `.png`) | Analysis 2: relative error change by category; omission visibility |
+| `F5_fluency_paradox_stacked.pdf` (+ `.png`) | Same as F5, panels stacked for single-column width |
 | `F7_overediting.pdf` (+ `.png`) | Analysis 4: unnecessary-edit rate by edit type, both mappings |
 
 ```bash
