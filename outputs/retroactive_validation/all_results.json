@@ -1,22 +1,23 @@
 {
   "metadata": {
-    "timestamp": "2026-10-05T21:56:08.919075",
+    "timestamp": "2026-10-06T16:36:13.153119",
     "data_version": "published_data.py verified 2026-10",
     "tag": "full",
     "excluded_sources": [],
     "withdrawn_analyses": {
+      "Analysis 1": "Difficulty gradient: no source in this literature reports detection rates by error category in a form permitting a correlation. Studies that break results down by error type measure correction effort rather than detection. The entailment is tested on annotation data instead (tom_validation).",
       "Analysis 3": "Expertise: no inferential source survives verification.",
       "Analysis 3b": "Development: Koponen (2015) contains no per-type or per-session data."
     },
     "source_counts": {
-      "analysis2": 5,
+      "analysis2": 4,
       "analysis4": 3
     }
   },
   "analysis1": {
     "experiment": "Analysis1_DifficultyOrdering",
     "prediction": "Higher-ToM error types are harder to detect",
-    "status": "qualitative only",
+    "status": "withdrawn",
     "findings": [
       {
         "analysis": "Analysis 1",
@@ -53,7 +54,7 @@
         }
       }
     ],
-    "interpretation": "NOT TESTED QUANTITATIVELY: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering."
+    "interpretation": "WITHDRAWN, NOT COUNTED: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering; they are kept for audit but excluded from the ledger."
   },
   "analysis2": {
     "experiment": "Analysis2_FluencyParadox",
@@ -297,29 +298,6 @@
       },
       {
         "analysis": "Analysis 2",
-        "source": "Popovic2018",
-        "claim": "NMT better on verb forms, order, compounds; worse on prepositions and ambiguous source words in every direction.",
-        "direction": "support",
-        "basis": "qualitative",
-        "source_location": "Table 2",
-        "detail": {
-          "nmt_better": [
-            "verb forms",
-            "verb omissions",
-            "verb order (DE-EN)",
-            "English noun collocations and German compounds",
-            "negation"
-          ],
-          "nmt_worse": [
-            "mistranslated prepositions (all directions)",
-            "ambiguous source words (all directions)",
-            "English continuous and perfect tenses"
-          ],
-          "caveat": "Ambiguous-word translation is a word-sense problem (S3) and NMT is worse at it in every direction, while improving on morphology and order (S2). The asymmetry is in the predicted direction, but the source reports no MQM-category rates, so no value is encoded."
-        }
-      },
-      {
-        "analysis": "Analysis 2",
         "source": "Koponen2019",
         "claim": "Overlooked necessary corrections: NMT 2.2%, SMT 2.7%, RBMT 3.3% of unedited words. NMT has the fewest.",
         "direction": "against",
@@ -441,7 +419,7 @@
         }
       }
     },
-    "interpretation": "5 supporting, 1 mixed and 1 contrary findings from 5 sources. No finding rests on an inferential test."
+    "interpretation": "4 supporting, 1 mixed and 1 contrary findings from 4 sources. No finding rests on an inferential test."
   },
   "analysis4": {
     "experiment": "Analysis4_OverEditing",
@@ -701,40 +679,6 @@
     "experiment": "EvidenceLedger",
     "findings": [
       {
-        "analysis": "Analysis 1",
-        "source": "Daems2017",
-        "claim": "Qualitative: grammatical errors predict technical and product effort; coherence and meaning shifts predict cognitive effort (fixations, duration). A dissociation along the hierarchy.",
-        "direction": "support",
-        "basis": "qualitative",
-        "source_location": "Daems et al. (2017), regression models by error type",
-        "detail": {
-          "caveat": "No per-error-type difficulty ranking exists in the source. Fixation duration was not significantly predicted by MT quality at all; the authors suggest it may be a poor effort measure. tau=1.000 in Analyses 1 and 3 was arithmetic, not a finding."
-        }
-      },
-      {
-        "analysis": "Analysis 1",
-        "source": "Popovic2018",
-        "claim": "NMT is worse than PBMT on ambiguous source words (S3) in every direction while better on verb forms and order (S2).",
-        "direction": "support",
-        "basis": "qualitative",
-        "source_location": "Table 2",
-        "detail": {
-          "nmt_better": [
-            "verb forms",
-            "verb omissions",
-            "verb order (DE-EN)",
-            "English noun collocations and German compounds",
-            "negation"
-          ],
-          "nmt_worse": [
-            "mistranslated prepositions (all directions)",
-            "ambiguous source words (all directions)",
-            "English continuous and perfect tenses"
-          ],
-          "caveat": "Ambiguous-word translation is a word-sense problem (S3) and NMT is worse at it in every direction, while improving on morphology and order (S2). The asymmetry is in the predicted direction, but the source reports no MQM-category rates, so no value is encoded."
-        }
-      },
-      {
         "analysis": "Analysis 2",
         "source": "Yamada2019",
         "claim": "Students corrected 77.7% of major errors in SMT output but 68% in NMT output.",
@@ -967,29 +911,6 @@
             "NMT": 1.5
           },
           "note": "The source states that in RBMT and PBMT output omissions are anticipated by fluency errors, whereas in NMT fluency is no indicator that source content transferred. This is a direct measurement of the mechanism ToM-PE posits: fluency removes the surface cue that would trigger the higher-order check."
-        }
-      },
-      {
-        "analysis": "Analysis 2",
-        "source": "Popovic2018",
-        "claim": "NMT better on verb forms, order, compounds; worse on prepositions and ambiguous source words in every direction.",
-        "direction": "support",
-        "basis": "qualitative",
-        "source_location": "Table 2",
-        "detail": {
-          "nmt_better": [
-            "verb forms",
-            "verb omissions",
-            "verb order (DE-EN)",
-            "English noun collocations and German compounds",
-            "negation"
-          ],
-          "nmt_worse": [
-            "mistranslated prepositions (all directions)",
-            "ambiguous source words (all directions)",
-            "English continuous and perfect tenses"
-          ],
-          "caveat": "Ambiguous-word translation is a word-sense problem (S3) and NMT is worse at it in every direction, while improving on morphology and order (S2). The asymmetry is in the predicted direction, but the source reports no MQM-category rates, so no value is encoded."
         }
       },
       {
@@ -1245,25 +1166,11 @@
       }
     ],
     "by_analysis": {
-      "Analysis 1": {
-        "status": "qualitative only",
-        "n_findings": 2,
-        "by_direction": {
-          "support": 2,
-          "mixed": 0,
-          "against": 0,
-          "uninformative": 0
-        },
-        "sources": [
-          "Daems2017",
-          "Popovic2018"
-        ]
-      },
       "Analysis 2": {
         "status": "run",
-        "n_findings": 7,
+        "n_findings": 6,
         "by_direction": {
-          "support": 5,
+          "support": 4,
           "mixed": 1,
           "against": 1,
           "uninformative": 0
@@ -1271,7 +1178,6 @@
         "sources": [
           "Bentivogli2018",
           "Koponen2019",
-          "Popovic2018",
           "VanBrussel2018",
           "Yamada2019"
         ]
@@ -1297,7 +1203,7 @@
       "support": {
         "numeric test": 2,
         "numeric descriptive": 4,
-        "qualitative": 3
+        "qualitative": 0
       },
       "mixed": {
         "numeric test": 0,
@@ -1315,8 +1221,8 @@
         "qualitative": 1
       }
     },
-    "n_findings": 13,
-    "n_distinct_sources": 9,
+    "n_findings": 10,
+    "n_distinct_sources": 7,
     "note": "Counts of findings, not of independent tests. A source can contribute more than one finding, and to more than one analysis."
   }
 }

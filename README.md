@@ -47,15 +47,24 @@ Tests predictions of the seven-**skill** model (S1–S7) against findings report
 published post-editing studies. The skills and the L0–L3 levels above are different
 constructs used for different purposes, so their mappings are not expected to align.
 
-Current status of the epxeriments can be found in 
- [Experiment_Report.md](outputs/retroactive_validation/Experiment_Report.md):
+Current status of the experiments can be found in
+[Experiment_Report.md](outputs/retroactive_validation/Experiment_Report.md). The
+repository keeps the original analysis numbering; the paper renumbers the two it
+reports:
 
-| Analysis | Status |
-|---|---|
-| 1. Difficulty ordering | Qualitative only: no verified source reports difficulty by error type |
-| 2. Fluency paradox | Directional findings from 5 sources, one contrary (Koponen et al. 2019) |
-| 3. Expertise, 3b. Development | Withdrawn: no verified data |
-| 4. Over-editing | Predicted negative τ in both sources with per-type rates; not significant |
+| Repository key | Paper | Status |
+|---|---|---|
+| `analysis1` | withdrawn (not testable on this literature) | Still run for audit, not counted: no verified source reports detection difficulty by error type. Tested on annotation data instead (Section 1). |
+| `analysis2` | Analysis 1: the fluency paradox | Directional findings, one contrary (Koponen et al. 2019) |
+| `analysis3`, `analysis3b` | withdrawn | No verified data |
+| `analysis4` | Analysis 2: over-editing concentration | Predicted negative τ in both sources with per-type rates; not significant |
+
+The reasons for each withdrawal are recorded in `metadata.withdrawn_analyses` of
+[all_results.json](outputs/retroactive_validation/all_results.json). The evidence
+ledger counts findings from repository Analyses 2 and 4 only. Its headline counts
+are written to [ledger_counts.tex](outputs/retroactive_validation/ledger_counts.tex)
+as `\newcommand` macros (`\LedgerSources`, `\LedgerFindings`, `\LedgerSupport`, …),
+which the paper `\input`s instead of restating the numbers.
 
 **Superseded results.** Earlier versions of this repository (up to commit `705b8ed`)
 reported a convergence ratio of 93.2–93.6 %, a pooled Analysis 1 p = 0.044, and
@@ -64,6 +73,11 @@ be cited. They remain in the history for audit. The convergence heatmap
 (`F6_convergence_heatmap.png`, also circulated as `Fig4_Convergence.pdf`) showed the
 withdrawn ratio, a "Partial" verdict and an expertise column for the withdrawn
 Analysis 3; it was deleted in commit `30e68d0` rather than regenerated.
+
+The camera-ready paper also withdraws the difficulty-gradient analysis and no
+longer cites Daems et al. (2017) or Popović (2018), neither of which reports data
+at the granularity that analysis required. Ledger counts in commits up to and
+including `3baa684` therefore exceed those in the published paper.
 
 ---
 

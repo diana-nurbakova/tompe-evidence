@@ -6,6 +6,11 @@ No verified source reports a per-error-type difficulty measure, so no
 correlation is computed. The former Kendall tau inputs (Daems fixation ranks,
 Yamada per-type correction rates, Popovic per-category rates, Temnikova ranks)
 were withdrawn; see `published_data.DELETED`. What remains is qualitative.
+
+WITHDRAWN from the paper and the evidence ledger. The analysis still runs and
+its findings are saved, so that what was attempted stays visible, but they are
+not counted. The entailment is tested on annotation data instead
+(`experiments/tom_validation`).
 """
 
 from __future__ import annotations
@@ -44,9 +49,10 @@ def run_all() -> Dict:
     return {
         "experiment": "Analysis1_DifficultyOrdering",
         "prediction": "Higher-ToM error types are harder to detect",
-        "status": "qualitative only",
+        "status": "withdrawn",
         "findings": findings,
-        "interpretation": ("NOT TESTED QUANTITATIVELY: no verified source reports "
+        "interpretation": ("WITHDRAWN, NOT COUNTED: no verified source reports "
                            "difficulty by error type. Two qualitative findings are "
-                           "consistent with the ordering."),
+                           "consistent with the ordering; they are kept for audit "
+                           "but excluded from the ledger."),
     }

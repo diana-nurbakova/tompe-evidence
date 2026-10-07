@@ -18,7 +18,7 @@ import numpy as np
 
 from .data import published_data as pd
 from .evidence_ledger import (
-    AGAINST, MIXED, NUMERIC_DESCRIPTIVE, QUALITATIVE, SUPPORT, finding,
+    AGAINST, MIXED, NUMERIC_DESCRIPTIVE, SUPPORT, finding,
 )
 from .tom_mapping import SKILL_TO_TOM_RANK, is_low_tom
 
@@ -144,17 +144,6 @@ def analyze_yamada(src: Dict) -> List[Dict]:
     )]
 
 
-def analyze_popovic(src: Dict) -> List[Dict]:
-    q = src["qualitative"]
-    return [finding(
-        ANALYSIS, src["source"],
-        "NMT better on verb forms, order, compounds; worse on prepositions and "
-        "ambiguous source words in every direction.",
-        SUPPORT, QUALITATIVE, src["source_location"],
-        {"nmt_better": q["nmt_better"], "nmt_worse": q["nmt_worse"], "caveat": q["note"]},
-    )]
-
-
 def analyze_koponen_2019(src: Dict) -> List[Dict]:
     """Overlooked necessary corrections: system totals only."""
     o = src["overlooked"]
@@ -172,7 +161,6 @@ ANALYZERS = {
     "Bentivogli2018": analyze_bentivogli,
     "VanBrussel2018": analyze_van_brussel,
     "Yamada2019": analyze_yamada,
-    "Popovic2018": analyze_popovic,
     "Koponen2019": analyze_koponen_2019,
 }
 

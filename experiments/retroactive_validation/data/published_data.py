@@ -373,9 +373,12 @@ MAPPING_SENSITIVITY = {
 EXPERIMENT_SOURCES = {
     # NO numeric source survives. The difficulty gradient has no quantitative
     # support in the retrospective literature; only the 46K analysis tests it.
+    # Withdrawn: still run for audit, not counted in the ledger.
     "analysis_1_difficulty":   ["Daems2017 (qualitative)", "Popovic2018 (qualitative)"],
+    # Popovic2018 dropped: qualitative only, and not cited in the paper's
+    # fluency alignment.
     "analysis_2_fluency":      ["Yamada2019", "Bentivogli2018", "VanBrussel2018",
-                                "Popovic2018 (qualitative)", "Koponen2019 (AGAINST)"],
+                                "Koponen2019 (AGAINST)"],
     "analysis_3_expertise":    [],   # deleted: no inferential source survives
     "analysis_3b_development": [],   # deleted: source contains no such data
     "analysis_4_overediting":  ["KoponenSalmi2017", "Koponen2019", "DeAlmeida2013",

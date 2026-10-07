@@ -121,9 +121,12 @@ def _summary(w: _Writer, results: Dict):
     w(f"- {led['n_findings']} findings from {led['n_distinct_sources']} distinct sources.")
     w(f"- {len(tested)} findings rest on an inferential test; {n_sig} of them "
       "reach p < 0.05.")
-    w("- Analysis 1 (difficulty ordering) has no quantitative test: no verified "
-      "source reports detection difficulty by error type.")
-    for k in ["analysis1", "analysis2", "analysis4"]:
+    w("- Analysis 1 (difficulty ordering) is withdrawn: no verified source reports "
+      "detection difficulty by error type. It is still run (Section 5) but its "
+      "findings are not counted in the ledger.")
+    w("- Paper numbering: repository Analysis 2 is the paper's Analysis 1 (fluency "
+      "paradox); repository Analysis 4 is the paper's Analysis 2 (over-editing).")
+    for k in ["analysis2", "analysis4"]:
         w(f"- **{results[k]['experiment']}**: {results[k]['interpretation']}")
     w()
     w("---")
@@ -209,13 +212,16 @@ LEDGER_HEADER = ["Source", "Direction", "Basis", "Finding", "Location"]
 
 def _analysis1(w: _Writer, results: Dict):
     a = results["analysis1"]
-    w("## 5. Analysis 1: ToM Ordering vs. Detection Difficulty")
+    w("## 5. Analysis 1: ToM Ordering vs. Detection Difficulty (withdrawn)")
     w()
     w(f"**Prediction.** {a['prediction']}.")
     w()
-    w("**Status.** Qualitative only. The rank correlations reported previously rested "
-      "on values withdrawn in Section 2.1 (Daems fixation ranks, Yamada per-type "
-      "correction rates, Popović category rates, Temnikova ranks).")
+    w("**Status.** Withdrawn; findings below are kept for audit and not counted in "
+      "the ledger. "
+      f"{results['metadata']['withdrawn_analyses'].get('Analysis 1', '')} "
+      "The rank correlations reported previously rested on values withdrawn in "
+      "Section 2.1 (Daems fixation ranks, Yamada per-type correction rates, Popović "
+      "category rates, Temnikova ranks).")
     w()
     w.table(LEDGER_HEADER, _ledger_rows(a["findings"]))
     w(f"**Interpretation.** {a['interpretation']}")
@@ -284,7 +290,7 @@ def _analysis2(w: _Writer, results: Dict):
 
 
 def _withdrawn(w: _Writer, results: Dict):
-    w("## 7. Analyses 3 and 3b: Withdrawn")
+    w("## 7. Withdrawn Analyses")
     w()
     for name, why in results["metadata"]["withdrawn_analyses"].items():
         w(f"- **{name}.** {why}")
@@ -371,7 +377,8 @@ def _limitations(w: _Writer, results: Dict):
       if not any(f["detail"].get("significant_at_05") for f in tested) else
       f"- {len(tested)} findings rest on an inferential test.")
     w("- The difficulty gradient (Analysis 1) has no quantitative support in the "
-      "verified literature.")
+      "verified literature and is withdrawn; it is tested on the WMT 2020 MQM "
+      "annotations instead (`tom_validation`).")
     w("- Measures differ between sources and are not commensurable; directions are "
       "compared, magnitudes are not.")
     w("- Nitzke & Gros (2020) and Mellinger & Shreve (2016) are excluded pending "
@@ -388,6 +395,7 @@ def _reproducibility(w: _Writer, results: Dict):
     w()
     w.table(["File", "Contents"], [
         ["`all_results.json`", "Structured results for every analysis and the ledger"],
+        ["`ledger_counts.tex`", "Ledger headline counts as `\\newcommand` macros; the paper `\\input`s it"],
         [f"`{REPORT_NAME}`", "This report"],
         ["`F5_fluency_paradox.pdf` (+ `.png`)", "Analysis 2: relative error change by category; omission visibility"],
         ["`F5_fluency_paradox_stacked.pdf` (+ `.png`)", "Same as F5, panels stacked for single-column width"],

@@ -2,11 +2,18 @@
 
 Runs the analyses that the verified source data support and produces:
 - JSON results (per-analysis + evidence ledger)
+- ledger_counts.tex: the ledger's headline counts as LaTeX macros for the paper
 - Figures F5 (Analysis 2; full-width and single-column stacked) and F7 (Analysis 4)
 - The detailed results report (Experiment_Report.md, via report.py)
 
 Analyses 3 (expertise) and 3b (development) are withdrawn: no verified source
 provides data for them (see `data/published_data.py`, EXPERIMENT_SOURCES).
+Analysis 1 (difficulty gradient) is withdrawn too, because the literature cannot
+support it; it still runs and its output is saved, but it is not counted.
+
+The paper numbers the counted analyses differently: repository Analysis 2 is the
+paper's Analysis 1 (fluency paradox), repository Analysis 4 its Analysis 2
+(over-editing). The keys here keep the original numbering.
 
 Usage:
     python -m experiments.retroactive_validation.run_all
@@ -37,6 +44,11 @@ from experiments.retroactive_validation import report
 BASE_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "retroactive_validation"
 
 WITHDRAWN = {
+    "Analysis 1": ("Difficulty gradient: no source in this literature reports detection "
+                   "rates by error category in a form permitting a correlation. Studies "
+                   "that break results down by error type measure correction effort "
+                   "rather than detection. The entailment is tested on annotation data "
+                   "instead (tom_validation)."),
     "Analysis 3": "Expertise: no inferential source survives verification.",
     "Analysis 3b": "Development: Koponen (2015) contains no per-type or per-session data.",
 }
@@ -58,13 +70,13 @@ def sources_for(analysis_key: str, exclude: list[str]) -> list[dict]:
 def print_summary(results: dict):
     sep = "=" * 70
     print(f"\n{sep}\nRETROACTIVE VALIDATION -- RESULTS [{results['metadata']['tag']}]\n{sep}")
-    for key in ["analysis1", "analysis2", "analysis4"]:
+    for key in ["analysis2", "analysis4"]:
         r = results[key]
         print(f"\n  {r['experiment']}\n  Prediction: {r['prediction']}\n  >> {r['interpretation']}")
     for name, why in WITHDRAWN.items():
         print(f"\n  {name}: WITHDRAWN. {why}")
-    print(f"\n  Ledger: {results['ledger']['n_findings']} findings from "
-          f"{results['ledger']['n_distinct_sources']} sources")
+    print("\n  Ledger (Analyses 2 and 4):")
+    print("\n".join("    " + s for s in ledger.summary_line(results["ledger"]).splitlines()))
     for d, row in results["ledger"]["by_direction_and_basis"].items():
         print(f"    {d:<14}" + "  ".join(f"{b}: {row[b]}" for b in ledger.BASES))
     print(sep)
@@ -88,7 +100,7 @@ def run(exclude: list[str] | None = None, tag: str = "full",
     a2_sources = sources_for("analysis_2_fluency", exclude)
     a4_sources = sources_for("analysis_4_overediting", exclude)
 
-    print("[1/4] Analysis 1: difficulty ordering (qualitative only)...")
+    print("[1/4] Analysis 1: difficulty ordering (withdrawn; run for audit, not counted)...")
     a1 = exp1.run_all()
     if exclude:
         a1["findings"] = [f for f in a1["findings"] if f["source"] not in exclude]
@@ -97,7 +109,7 @@ def run(exclude: list[str] | None = None, tag: str = "full",
     print(f"[3/4] Analysis 4: over-editing ({len(a4_sources)} sources)...")
     a4 = exp4.run_all(a4_sources)
     print("[4/4] Evidence ledger...")
-    summary = ledger.summarise({"Analysis 1": a1, "Analysis 2": a2, "Analysis 4": a4})
+    summary = ledger.summarise({"Analysis 2": a2, "Analysis 4": a4})
 
     results = {
         "metadata": {
@@ -117,6 +129,7 @@ def run(exclude: list[str] | None = None, tag: str = "full",
     results_path = output_dir / "all_results.json"
     results_path.write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
     print(f"\nResults saved to {results_path}")
+    print(f"Ledger counts saved to {ledger.write_latex_counts(summary, output_dir)}")
 
     print("\nGenerating figures and report...")
     print(f"  F5: {viz.figure_f5_fluency(a2, output_dir)}")

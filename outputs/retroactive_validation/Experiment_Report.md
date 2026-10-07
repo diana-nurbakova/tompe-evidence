@@ -2,8 +2,8 @@
 
 Detailed results report. Generated from `all_results.json` and `data/published_data.py`; do not edit by hand.
 
-- **Generated:** 2026-10-05 21:56
-- **Run timestamp:** 2026-10-05T21:56:08.919075
+- **Generated:** 2026-10-06 16:36
+- **Run timestamp:** 2026-10-06T16:36:13.153119
 - **Data version:** published_data.py verified 2026-10
 - **Tag:** `full`
 - **Excluded sources:** none
@@ -15,17 +15,17 @@ Detailed results report. Generated from `all_results.json` and `data/published_d
 
 | Analysis | Status | Support | Mixed | Against | Uninformative | Sources |
 |---|---|---|---|---|---|---|
-| Analysis 1 | qualitative only | 2 | 0 | 0 | 0 | Daems2017, Popovic2018 |
-| Analysis 2 | run | 5 | 1 | 1 | 0 | Bentivogli2018, Koponen2019, Popovic2018, VanBrussel2018, Yamada2019 |
+| Analysis 2 | run | 4 | 1 | 1 | 0 | Bentivogli2018, Koponen2019, VanBrussel2018, Yamada2019 |
 | Analysis 4 | run | 2 | 1 | 0 | 1 | DeAlmeida2013, Koponen2015, Koponen2019, KoponenSalmi2017 |
+| Analysis 1 | withdrawn |  |  |  |  | Difficulty gradient: no source in this literature reports detection rates by error category in a form permitting a correlation. Studies that break results down by error type measure correction effort rather than detection. The entailment is tested on annotation data instead (tom_validation). |
 | Analysis 3 | withdrawn |  |  |  |  | Expertise: no inferential source survives verification. |
 | Analysis 3b | withdrawn |  |  |  |  | Development: Koponen (2015) contains no per-type or per-session data. |
 
-- 13 findings from 9 distinct sources.
+- 10 findings from 7 distinct sources.
 - 2 findings rest on an inferential test; 0 of them reach p < 0.05.
-- Analysis 1 (difficulty ordering) has no quantitative test: no verified source reports detection difficulty by error type.
-- **Analysis1_DifficultyOrdering**: NOT TESTED QUANTITATIVELY: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering.
-- **Analysis2_FluencyParadox**: 5 supporting, 1 mixed and 1 contrary findings from 5 sources. No finding rests on an inferential test.
+- Analysis 1 (difficulty ordering) is withdrawn: no verified source reports detection difficulty by error type. It is still run (Section 5) but its findings are not counted in the ledger.
+- Paper numbering: repository Analysis 2 is the paper's Analysis 1 (fluency paradox); repository Analysis 4 is the paper's Analysis 2 (over-editing).
+- **Analysis2_FluencyParadox**: 4 supporting, 1 mixed and 1 contrary findings from 4 sources. No finding rests on an inferential test.
 - **Analysis4_OverEditing**: 2/2 sources with per-type rates show the predicted negative tau under both mappings; none is significant. Nitzke & Gros and Mellinger & Shreve are not counted until verified.
 
 ---
@@ -94,7 +94,7 @@ Results produced from the earlier encoding (the former convergence table, the An
 | Analysis | Sources |
 |---|---|
 | analysis_1_difficulty | Daems2017 (qualitative), Popovic2018 (qualitative) |
-| analysis_2_fluency | Yamada2019, Bentivogli2018, VanBrussel2018, Popovic2018 (qualitative), Koponen2019 (AGAINST) |
+| analysis_2_fluency | Yamada2019, Bentivogli2018, VanBrussel2018, Koponen2019 (AGAINST) |
 | analysis_3_expertise | none (withdrawn) |
 | analysis_3b_development | none (withdrawn) |
 | analysis_4_overediting | KoponenSalmi2017, Koponen2019, DeAlmeida2013, NitzkeGros2020 (aggregates only), MellingerShreve2016 (aggregates only), Koponen2015 (qualitative) |
@@ -110,18 +110,18 @@ Results produced from the earlier encoding (the former convergence table, the An
 
 ---
 
-## 5. Analysis 1: ToM Ordering vs. Detection Difficulty
+## 5. Analysis 1: ToM Ordering vs. Detection Difficulty (withdrawn)
 
 **Prediction.** Higher-ToM error types are harder to detect.
 
-**Status.** Qualitative only. The rank correlations reported previously rested on values withdrawn in Section 2.1 (Daems fixation ranks, Yamada per-type correction rates, Popović category rates, Temnikova ranks).
+**Status.** Withdrawn; findings below are kept for audit and not counted in the ledger. Difficulty gradient: no source in this literature reports detection rates by error category in a form permitting a correlation. Studies that break results down by error type measure correction effort rather than detection. The entailment is tested on annotation data instead (tom_validation). The rank correlations reported previously rested on values withdrawn in Section 2.1 (Daems fixation ranks, Yamada per-type correction rates, Popović category rates, Temnikova ranks).
 
 | Source | Direction | Basis | Finding | Location |
 |---|---|---|---|---|
 | Daems2017 | support | qualitative | Qualitative: grammatical errors predict technical and product effort; coherence and meaning shifts predict cognitive effort (fixations, duration). A dissociation along the hierarchy. | Daems et al. (2017), regression models by error type |
 | Popovic2018 | support | qualitative | NMT is worse than PBMT on ambiguous source words (S3) in every direction while better on verb forms and order (S2). | Table 2 |
 
-**Interpretation.** NOT TESTED QUANTITATIVELY: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering.
+**Interpretation.** WITHDRAWN, NOT COUNTED: no verified source reports difficulty by error type. Two qualitative findings are consistent with the ordering; they are kept for audit but excluded from the ledger.
 
 ---
 
@@ -140,7 +140,6 @@ Results produced from the earlier encoding (the former convergence table, the An
 | Bentivogli2018 | support | numeric descriptive | Lexical errors' share of residual errors rises from PBMT to NMT (EnDe 72.1% -> 76.9%, EnFr 74.5% -> 79.0%). | Section 5 |
 | VanBrussel2018 | mixed | numeric descriptive | Error counts NMT vs PBMT: grammar (S2) fell 72%; 4/5 high-ToM categories fell less or rose (exception: addition). | Tables 1, 3, 4, 7, 9 |
 | VanBrussel2018 | support | numeric descriptive | Omissions with no trace in the target: RBMT 7%, PBMT 23%, NMT 69%. In NMT, fluency no longer signals that source content is missing. | Table 6 |
-| Popovic2018 | support | qualitative | NMT better on verb forms, order, compounds; worse on prepositions and ambiguous source words in every direction. | Table 2 |
 | Koponen2019 | against | numeric descriptive | Overlooked necessary corrections: NMT 2.2%, SMT 2.7%, RBMT 3.3% of unedited words. NMT has the fewest. | Section 4.1, closing paragraph |
 
 ### 6.2 Bentivogli et al. (2018): relative error change, NMT vs PBMT
@@ -169,14 +168,15 @@ Caveat: The source uses three coarse classes only (lexical, morphology, word ord
 
 Against PBMT (primary): mixed. Against RBMT (secondary, not counted): mixed.
 
-**Interpretation.** 5 supporting, 1 mixed and 1 contrary findings from 5 sources. No finding rests on an inferential test.
+**Interpretation.** 4 supporting, 1 mixed and 1 contrary findings from 4 sources. No finding rests on an inferential test.
 
 *Contrary evidence (Koponen2019).* NMT has the FEWEST overlooked necessary corrections. At the only level the source reports, this runs counter to the fluency-paradox prediction. Report it; do not drop it.
 
 ---
 
-## 7. Analyses 3 and 3b: Withdrawn
+## 7. Withdrawn Analyses
 
+- **Analysis 1.** Difficulty gradient: no source in this literature reports detection rates by error category in a form permitting a correlation. Studies that break results down by error type measure correction effort rather than detection. The entailment is tested on annotation data instead (tom_validation).
 - **Analysis 3.** Expertise: no inferential source survives verification.
 - **Analysis 3b.** Development: Koponen (2015) contains no per-type or per-session data.
 
@@ -233,21 +233,21 @@ The ledger replaces the former category-by-analysis convergence table and its co
 
 | Direction | numeric test | numeric descriptive | qualitative | Total |
 |---|---|---|---|---|
-| support | 2 | 4 | 3 | 9 |
+| support | 2 | 4 | 0 | 6 |
 | mixed | 0 | 2 | 0 | 2 |
 | against | 0 | 1 | 0 | 1 |
 | uninformative | 0 | 0 | 1 | 1 |
 
 Counts of findings, not of independent tests. A source can contribute more than one finding, and to more than one analysis.
 
-Sources contributing to more than one analysis: Koponen2019, Popovic2018.
+Sources contributing to more than one analysis: Koponen2019.
 
 ---
 
 ## 10. Limitations
 
 - Only 2 findings rest on an inferential test, and none reaches significance. The retrospective evidence is directional, not confirmatory.
-- The difficulty gradient (Analysis 1) has no quantitative support in the verified literature.
+- The difficulty gradient (Analysis 1) has no quantitative support in the verified literature and is withdrawn; it is tested on the WMT 2020 MQM annotations instead (`tom_validation`).
 - Measures differ between sources and are not commensurable; directions are compared, magnitudes are not.
 - Nitzke & Gros (2020) and Mellinger & Shreve (2016) are excluded pending verification; Stasimioti & Sosoni (2021) contributes no data.
 - The direction rule in Analysis 2 counts consistent comparisons; it does not weight categories by size.
@@ -259,6 +259,7 @@ Sources contributing to more than one analysis: Koponen2019, Popovic2018.
 | File | Contents |
 |---|---|
 | `all_results.json` | Structured results for every analysis and the ledger |
+| `ledger_counts.tex` | Ledger headline counts as `\newcommand` macros; the paper `\input`s it |
 | `Experiment_Report.md` | This report |
 | `F5_fluency_paradox.pdf` (+ `.png`) | Analysis 2: relative error change by category; omission visibility |
 | `F5_fluency_paradox_stacked.pdf` (+ `.png`) | Same as F5, panels stacked for single-column width |
